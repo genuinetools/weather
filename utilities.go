@@ -54,7 +54,7 @@ func getIcon(sky string, isNight bool) (icon string, err error) {
 	icon = string(out)
 
 	// if it's a night icon, try for day
-	if isNight && icon == "" {
+	if (isNight && icon == "") || (isNight && strings.Contains(icon, "<?xml")) {
 		return getIcon(sky, false)
 	}
 
