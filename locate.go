@@ -1,10 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"net/url"
 )
 
 // response from www.telize.com/geoip
@@ -47,8 +47,25 @@ type GeoLocation struct {
 	Timezone      string  `json:"timezone"`
 }
 
-func requestLocation(uri string) (geolocation GeoLocation, err error) {
-	resp, err := http.Get(uri)
+func requestLocation(uri, method string, data interface{}) (geolocation GeoLocation, err error) {
+	client := &http.Client{}
+
+	// create json data
+	jsonByte, err := json.Marshal(data)
+	if err != nil {
+		return geolocation, fmt.Errorf("Marshaling JSON for %s to %s failed: %s", method, uri, err.Error())
+	}
+
+	// send the request
+	req, err := http.NewRequest(method, uri, bytes.NewReader(jsonByte))
+	if err != nil {
+		return geolocation, fmt.Errorf("Creating the %s request to %s failed: %s", method, uri, err.Error())
+	}
+	req.Header.Set("Content-Type", "application/json")
+	resp, err := client.Do(req)
+	if err != nil {
+		return geolocation, fmt.Errorf("%s to %s failed: %s", method, uri, err.Error())
+	}
 	defer resp.Body.Close()
 
 	// decode the body
@@ -66,7 +83,7 @@ func requestLocation(uri string) (geolocation GeoLocation, err error) {
 func autolocate() (geolocation GeoLocation, err error) {
 	uri := "http://www.telize.com/geoip"
 
-	return requestLocation(uri)
+	return requestLocation(uri, "GET", map[string]string{})
 }
 
 func locate(location string) (geolocation GeoLocation, err error) {
@@ -74,6 +91,6 @@ func locate(location string) (geolocation GeoLocation, err error) {
 		return autolocate()
 	}
 
-	uri := "http://geocode.jessfraz.com/?location=" + url.QueryEscape(location)
-	return requestLocation(uri)
+	uri := "http://geocode.jessfraz.com/geocode"
+	return requestLocation(uri, "POST", map[string]string{"location": location})
 }
