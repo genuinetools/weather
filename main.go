@@ -43,5 +43,4 @@ func main() {
 
 		printDailyWeather(dailyForecast, geolocation, units)
 	}
-
 }
