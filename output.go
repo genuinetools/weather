@@ -3,29 +3,40 @@ package main
 import (
 	"fmt"
 	"github.com/mitchellh/colorstring"
-	"time"
 )
 
 type UnitMeasures struct {
-	Degrees          string
-	Speed            string
-	Pressure         string
-	PressureMultiple float64
+	Degrees       string
+	Speed         string
+	Length        string
+	Precipitation string
 }
 
 var (
 	UnitFormats map[string]UnitMeasures = map[string]UnitMeasures{
-		"metric": UnitMeasures{
-			Degrees:          "°C",
-			Speed:            "m/s",
-			Pressure:         "hPa",
-			PressureMultiple: 1,
+		"us": UnitMeasures{
+			Degrees:       "°F",
+			Speed:         "mph",
+			Length:        "miles",
+			Precipitation: "in/hr",
 		},
-		"imperial": UnitMeasures{
-			Degrees:          "°F",
-			Speed:            "mph",
-			Pressure:         "inHg",
-			PressureMultiple: 0.0295,
+		"si": UnitMeasures{
+			Degrees:       "°C",
+			Speed:         "m/s",
+			Length:        "kilometers",
+			Precipitation: "mm/h",
+		},
+		"ca": UnitMeasures{
+			Degrees:       "°C",
+			Speed:         "km/h",
+			Length:        "kilometers",
+			Precipitation: "mm/h",
+		},
+		"uk": UnitMeasures{
+			Degrees:       "°C",
+			Speed:         "mph",
+			Length:        "kilometers",
+			Precipitation: "mm/h",
 		},
 	}
 	Directions []string = []string{
@@ -33,86 +44,104 @@ var (
 	}
 )
 
-func printWeather(forecast Forecast, geolocation GeoLocation, units string) {
-	unitsFormat := UnitFormats[units]
-
-	now := int64(time.Now().Unix())
-
-	var sky, icon string
-	isNight := false
-	if len(forecast.Weather) > 0 {
-		sky = cleanString(forecast.Weather[0].Main)
-
-		if now >= forecast.Sys.Sunset || now < forecast.Sys.Sunrise {
-			isNight = true
+func printWeather(weather Weather, unitsFormat UnitMeasures) {
+	if weather.Humidity > 0 {
+		humidity := colorstring.Color(fmt.Sprintf("[white]%v%s", weather.Humidity*100, "%"))
+		if weather.Humidity > 0.20 {
+			fmt.Printf("Ick! The humidity is %s\n", humidity)
+		} else {
+			fmt.Printf("The humidity is %s\n", humidity)
 		}
-
-		icon, _ = getIcon(sky, isNight)
 	}
 
-	fmt.Println(colorstring.Color("[blue]" + icon))
-	fmt.Printf("\nCurrent weather in %s, %s for %s\n", geolocation.City, geolocation.Region, epochFormat(forecast.Date))
-
-	if sky != "" && sky != "clear" {
-		fmt.Printf("We see %s in the sky\n\n", sky)
+	if weather.PrecipIntensity > 0 {
+		precInt := colorstring.Color(fmt.Sprintf("[white]%v %s", weather.PrecipIntensity, unitsFormat.Precipitation))
+		fmt.Printf("The precipitation intensity of %s is %s\n", colorstring.Color("[white]"+weather.PrecipType), precInt)
 	}
 
-	fmt.Printf("The temperature is %v%s, with a high of %v%s & a low of %v%s\n\n", forecast.Temperature.Temperature, unitsFormat.Degrees, forecast.Temperature.TemperatureMax, unitsFormat.Degrees, forecast.Temperature.TemperatureMin, unitsFormat.Degrees)
-
-	if forecast.Temperature.Humidity > 20 {
-		fmt.Printf("Ick! The humidity is %v%s\n", forecast.Temperature.Humidity, "%")
-	} else if forecast.Temperature.Humidity > 0 {
-		fmt.Printf("The humidity is %v%s\n", forecast.Temperature.Humidity, "%")
-
+	if weather.PrecipProbability > 0 {
+		prec := colorstring.Color(fmt.Sprintf("[white]%v%s", weather.PrecipProbability*100, "%"))
+		fmt.Printf("The precipitation probability is %s\n", prec)
 	}
 
-	fmt.Printf("The wind speed is %v %s %v\n", forecast.Wind.Speed, unitsFormat.Speed, getWindDetails(forecast.Wind.Degrees))
+	if weather.NearestStormDistance > 0 {
+		dist := colorstring.Color(fmt.Sprintf("[white]%v %s %v", weather.NearestStormDistance, unitsFormat.Length, getBearingDetails(weather.NearestStormBearing)))
+		fmt.Printf("The nearest storm is %s away\n", dist)
+	}
 
-	fmt.Printf("The pressure is %v %s\n", Round(forecast.Temperature.Pressure*unitsFormat.PressureMultiple, 2), unitsFormat.Pressure)
+	if weather.WindSpeed > 0 {
+		wind := colorstring.Color(fmt.Sprintf("[white]%v %s %v", weather.WindSpeed, unitsFormat.Speed, getBearingDetails(weather.WindBearing)))
+		fmt.Printf("The wind speed is %s\n", wind)
+	}
 
-	fmt.Printf("Sunrise is %v\n", epochFormat(forecast.Sys.Sunrise))
-	fmt.Printf("Sunset is %v\n", epochFormat(forecast.Sys.Sunset))
+	if weather.CloudCover > 0 {
+		cloudCover := colorstring.Color(fmt.Sprintf("[white]%v%s", weather.CloudCover*100, "%"))
+		fmt.Printf("The cloud coverage is %s\n", cloudCover)
+	}
+
+	if weather.Visibility < 10 {
+		visibilty := colorstring.Color(fmt.Sprintf("[white]%v %s", weather.Visibility, unitsFormat.Length))
+		fmt.Printf("The visibilty is %s\n", visibilty)
+	}
+
+	if weather.Pressure > 0 {
+		pressure := colorstring.Color(fmt.Sprintf("[white]%v %s", weather.Pressure, "mbar"))
+		fmt.Printf("The pressure is %s\n", pressure)
+	}
 }
 
-func printDailyWeather(dailyForecast DailyForecast, geolocation GeoLocation, units string) {
-	unitsFormat := UnitFormats[units]
+func printCurrentWeather(forecast Forecast, geolocation GeoLocation, ignoreAlerts bool) {
+	unitsFormat := UnitFormats[forecast.Flags.Units]
 
-	fmt.Printf("\nWeather in %s, %s for the next %v days\n\n", geolocation.City, geolocation.Region, dailyForecast.Count)
+	icon, err := getIcon(forecast.Currently.Icon)
+	if err != nil {
+		printError(err)
+	} else {
+		fmt.Println(icon)
+	}
 
-	for _, forecast := range dailyForecast.Forecasts {
-		var sky string
-		for _, weather := range forecast.Weather {
-			sky = cleanString(weather.Main)
-			if sky != "clear" && sky != "clouds" {
-				sky += "y"
-			} else if sky != "clouds" {
-				sky = "cloudy"
+	location := colorstring.Color(fmt.Sprintf("[green]%s in %s", geolocation.City, geolocation.Region))
+	fmt.Printf("\nCurrent weather is %s in %s for %s\n", colorstring.Color("[cyan]"+forecast.Currently.Summary), location, colorstring.Color("[cyan]"+epochFormat(forecast.Currently.Time)))
+
+	temp := colorstring.Color(fmt.Sprintf("[magenta]%v%s", forecast.Currently.Temperature, unitsFormat.Degrees))
+	feelslike := colorstring.Color(fmt.Sprintf("[magenta]%v%s", forecast.Currently.ApparentTemperature, unitsFormat.Degrees))
+	fmt.Printf("The temperature is %s, but it feels like %s\n\n", temp, feelslike)
+
+	if !ignoreAlerts {
+		for _, alert := range forecast.Alerts {
+			if alert.Title != "" {
+				fmt.Println(colorstring.Color("[red]" + alert.Title))
 			}
+			if alert.Description != "" {
+				fmt.Print(colorstring.Color("[red]" + alert.Description))
+			}
+			fmt.Println("\t\t\t" + colorstring.Color("[red]Created: "+epochFormat(alert.Time)))
+			fmt.Println("\t\t\t" + colorstring.Color("[red]Expires: "+epochFormat(alert.Expires)) + "\n")
+		}
+	}
 
+	printWeather(forecast.Currently, unitsFormat)
+}
+
+func printDailyWeather(forecast Forecast, days int) {
+	unitsFormat := UnitFormats[forecast.Flags.Units]
+
+	fmt.Println(colorstring.Color("\n[white]" + fmt.Sprintf("%v Day Forecast", days)))
+
+	for index, daily := range forecast.Daily.Data {
+		// only do the amount of days they request
+		if index == days {
 			break
 		}
 
-		fmt.Printf("On %s\n", epochFormatDate(forecast.Date))
+		fmt.Println(colorstring.Color("\n[magenta]" + epochFormatDate(daily.Time)))
 
-		fmt.Printf("We are predicting %s skies.\n", sky)
+		tempMax := colorstring.Color(fmt.Sprintf("[blue]%v%s", daily.TemperatureMax, unitsFormat.Degrees))
+		tempMin := colorstring.Color(fmt.Sprintf("[blue]%v%s", daily.TemperatureMin, unitsFormat.Degrees))
+		feelsLikeMax := colorstring.Color(fmt.Sprintf("[cyan]%v%s", daily.ApparentTemperatureMax, unitsFormat.Degrees))
+		feelsLikeMin := colorstring.Color(fmt.Sprintf("[cyan]%v%s", daily.ApparentTemperatureMin, unitsFormat.Degrees))
+		fmt.Printf("The temperature high is %s, feels like %s around %s, and low is %s, feels like %s around %s\n\n", tempMax, feelsLikeMax, epochFormatTime(daily.TemperatureMaxTime), tempMin, feelsLikeMin, epochFormatTime(daily.TemperatureMinTime))
 
-		fmt.Printf("\tTemperature: %v%s\n", forecast.Temperature.Day, unitsFormat.Degrees)
-		fmt.Printf("\tHigh: %v%s\n", forecast.Temperature.Max, unitsFormat.Degrees)
-		fmt.Printf("\tLow: %v%s\n", forecast.Temperature.Min, unitsFormat.Degrees)
-		fmt.Printf("\tMorning: %v%s\n", forecast.Temperature.Morning, unitsFormat.Degrees)
-		fmt.Printf("\tNight: %v%s\n", forecast.Temperature.Night, unitsFormat.Degrees)
-
-		if forecast.Rain > 0 {
-			fmt.Printf("\n\tPrecipitation: %v", forecast.Rain)
-		}
-		if forecast.Clouds > 0 {
-			fmt.Printf("\n\tCloudiness: %v%s\n", forecast.Clouds, "%")
-		}
-
-		fmt.Printf("\n\tHumidity: %v%s\n", forecast.Humidity, "%")
-
-		fmt.Printf("\tWind: %v %s %v\n", forecast.Speed, unitsFormat.Speed, getWindDetails(forecast.Degrees))
-
-		fmt.Printf("\tPressure: %v %s\n\n", Round(forecast.Pressure*unitsFormat.PressureMultiple, 2), unitsFormat.Pressure)
+		printWeather(daily, unitsFormat)
 	}
 }

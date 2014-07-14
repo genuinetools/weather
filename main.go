@@ -2,45 +2,54 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"os"
 )
+
+type ForecastRequest struct {
+	Latitude  float64  `json:"lat"`
+	Longitude float64  `json:"lng"`
+	Units     string   `json:"units"`
+	Exclude   []string `json:"exclude"`
+}
 
 func main() {
 	var location string
 	var units string
 	var days int
+	var ignoreAlerts bool
 
 	// parse flags
 	flag.StringVar(&location, "location", "", "Location to get the weather")
 	flag.StringVar(&location, "l", "", "Location to get the weather (shorthand)")
-	flag.StringVar(&units, "units", "imperial", "System of units")
-	flag.StringVar(&units, "u", "imperial", "System of units (shorthand)")
+	flag.StringVar(&units, "units", "auto", "System of units")
+	flag.StringVar(&units, "u", "auto", "System of units (shorthand)")
 	flag.IntVar(&days, "days", 0, "No. of days to get forecast")
 	flag.IntVar(&days, "d", 0, "No. of days to get forecast (shorthand)")
+	flag.BoolVar(&ignoreAlerts, "ignore-alerts", false, "Ignore alerts in weather output")
 	flag.Parse()
 
 	geolocation, err := locate(location)
 	if err != nil {
-		fmt.Println(err.Error())
+		printError(err)
 		os.Exit(1)
 	}
 
-	if days <= 1 {
-		forecast, err := getForecast(geolocation, units)
-		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(1)
-		}
+	data := ForecastRequest{
+		Latitude:  geolocation.Latitude,
+		Longitude: geolocation.Longitude,
+		Units:     units,
+		Exclude:   []string{"hourly", "minutely"},
+	}
 
-		printWeather(forecast, geolocation, units)
-	} else {
-		dailyForecast, err := getDailyForecast(geolocation, units, days)
-		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(1)
-		}
+	forecast, err := getForecast(data)
+	if err != nil {
+		printError(err)
+		os.Exit(1)
+	}
 
-		printDailyWeather(dailyForecast, geolocation, units)
+	printCurrentWeather(forecast, geolocation, ignoreAlerts)
+
+	if days > 1 {
+		printDailyWeather(forecast, days)
 	}
 }

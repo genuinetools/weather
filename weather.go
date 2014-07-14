@@ -3,176 +3,204 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	// "io/ioutil"
 	"net/http"
-	"strconv"
 )
 
-// response from api.openweathermap.org/data/2.5/weather
+// response from https://api.forecast.io/forecast/
 // comes back like:
 // {
-//   "coord": {
-//     "lon": -73.95,
-//     "lat": 40.78
-//   },
-//   "sys": {
-//     "message": 0.1898,
-//     "country": "US",
-//     "sunrise": 1405244175,
-//     "sunset": 1405297622
-//   },
-//   "weather": [
-//     {
-//       "id": 803,
-//       "main": "Clouds",
-//       "description": "broken clouds",
-//       "icon": "04d"
-//     }
-//   ],
-//   "base": "cmc stations",
-//   "main": {
-//     "temp": 301.32,
-//     "pressure": 1015,
-//     "humidity": 69,
-//     "temp_min": 299.15,
-//     "temp_max": 304.15
-//   },
-//   "wind": {
-//     "speed": 1.5,
-//     "deg": 0
-//   },
-//   "rain": {
-//     "3h": 0
-//   },
-//   "snow": {
-//     "3h": 0
-//   },
-//   "clouds": {
-//     "all": 75
-//   },
-//   "dt": 1405278900,
-//   "id": 7250946,
-//   "name": "Carnegie Hill",
-//   "cod": 200
+//     "alerts": [
+//         {
+//             "description": "...BLOWING DUST ADVISORY REMAINS IN EFFECT UNTIL 11 PM MST THIS\nEVENING...\nA BLOWING DUST ADVISORY REMAINS IN EFFECT UNTIL 11 PM MST THIS\nEVENING.\n* AFFECTED AREA...NORTHWEST AND NORTH-CENTRAL PINAL COUNTY...\nEXTENDING NORTH INTO EAST CENTRAL MARICOPA COUNTY...INCLUDING\nCHANDLER...GILBERT...MESA...TEMPE...AND THE GREATER PHOENIX\nAREA\n* TIMING...UNTIL 11 PM.\n* WINDS...SOUTH-SOUTHEAST 30 MPH WITH GUSTS UP TO 45 MPH\nPOSSIBLE.\n* VISIBILITY...3 MILES IN BLOWING DUST...LOCALLY DOWN TO AS LOW\nAS ONE MILE.\n* IMPACTS...SUDDEN DROPS IN VISIBILITIES DUE TO BLOWING DUST\nWILL CREATE HAZARDOUS TRAVEL CONDITIONS...ESPECIALLY AT NIGHT.\nTRAVELERS NEED TO BE READY FOR RAPIDLY CHANGING ROAD\nCONDITIONS.\n",
+//             "expires": 1405317600,
+//             "time": 1405313940,
+//             "title": "Blowing Dust Advisory for Maricopa, AZ",
+//             "uri": "http://alerts.weather.gov/cap/wwacapget.php?x=AZ1251601B31CC.BlowingDustAdvisory.1251601B68E0AZ.PSRNPWPSR.5957bb654b0ef12b8351fd6d518e951e"
+//         }
+//     ],
+//     "currently": {
+//         "apparentTemperature": 91.72,
+//         "cloudCover": 0.92,
+//         "dewPoint": 64.97,
+//         "humidity": 0.44,
+//         "icon": "partly-cloudy-night",
+//         "nearestStormDistance": 0,
+//         "nearestStormBearing": 0,
+//         "ozone": 295.8,
+//         "precipIntensity": 0,
+//         "precipProbability": 0,
+//         "pressure": 1010.85,
+//         "summary": "Mostly Cloudy",
+//         "temperature": 89.72,
+//         "time": 1405315610,
+//         "visibility": 9.99,
+//         "windBearing": 208,
+//         "windSpeed": 6.48
+//     },
+//     "daily": {
+//         "data": [
+//             {
+//                 "apparentTemperatureMax": 107.25,
+//                 "apparentTemperatureMaxTime": 1405288800,
+//                 "apparentTemperatureMin": 86.87,
+//                 "apparentTemperatureMinTime": 1405252800,
+//                 "cloudCover": 0.68,
+//                 "dewPoint": 62.06,
+//                 "humidity": 0.35,
+//                 "icon": "rain",
+//                 "moonPhase": 0.55,
+//                 "ozone": 299.93,
+//                 "precipIntensity": 0.0047,
+//                 "precipIntensityMax": 0.0308,
+//                 "precipIntensityMaxTime": 1405310400,
+//                 "precipProbability": 0.95,
+//                 "precipType": "rain",
+//                 "pressure": 1009.52,
+//                 "summary": "Light rain starting in the afternoon.",
+//                 "sunriseTime": 1405254533,
+//                 "sunsetTime": 1405305631,
+//                 "temperatureMax": 105.3,
+//                 "temperatureMaxTime": 1405288800,
+//                 "temperatureMin": 86.14,
+//                 "temperatureMinTime": 1405252800,
+//                 "time": 1405234800,
+//                 "visibility": 9.88,
+//                 "windBearing": 149,
+//                 "windSpeed": 2.95
+//             }...
+//         ],
+//         "icon": "rain",
+//         "summary": "Light rain today and tomorrow, with temperatures rising to 109°F on Thursday."
+//     },
+//     "flags": {
+//         "units": "us"
+//     },
+//     "hourly": {
+//         "data": [
+//             {
+//                 "apparentTemperature": 92.39,
+//                 "cloudCover": 0.91,
+//                 "dewPoint": 64.12,
+//                 "humidity": 0.41,
+//                 "icon": "rain",
+//                 "ozone": 295.87,
+//                 "precipIntensity": 0.0178,
+//                 "precipProbability": 0.52,
+//                 "precipType": "rain",
+//                 "pressure": 1010.44,
+//                 "summary": "Light Rain",
+//                 "temperature": 90.77,
+//                 "time": 1405314000,
+//                 "visibility": 10,
+//                 "windBearing": 195,
+//                 "windSpeed": 6.06
+//             }...
+//         ],
+//         "icon": "rain",
+//         "summary": "Drizzle starting tomorrow afternoon, continuing until tomorrow evening."
+//     },
+//     "latitude": 33.4962205,
+//     "longitude": -111.9641728,
+//     "minutely": {
+//         "data": [
+//             {
+//                 "precipIntensity": 0,
+//                 "precipProbability": 0,
+//                 "time": 1405315920
+//             },
+//             {
+//                 "precipIntensity": 0.0027,
+//                 "precipIntensityError": 0.0002,
+//                 "precipProbability": 0.01,
+//                 "precipType": "rain",
+//                 "time": 1405315980
+//             }...
+//         ],
+//         "icon": "partly-cloudy-night",
+//         "summary": "Mostly cloudy for the hour."
+//     },
+//     "offset": -7,
+//     "timezone": "America/Phoenix"
 // }
 
 type Forecast struct {
-	Base        string      `json:"base"`
-	Date        int64       `json:"dt"`
-	Clouds      Clouds      `json:"clouds"`
-	Coordinates Coordinates `json:coord"`
-	Id          int64       `json:"id"`
-	Name        string      `json:"name"`
-	Rain        Future      `json:"rain"`
-	Snow        Future      `json:"rain"`
-	Status      int         `json:"cod"`
-	Sys         WeatherSys  `json:"sys"`
-	Temperature Temperature `json:"main"`
-	Weather     []Weather   `json:"weather"`
-	Wind        Wind        `json:"wind"`
+	Alerts    []Alert       `json:"alerts"`
+	Currently Weather       `json:"currently"`
+	Code      int           `json:"code"`
+	Daily     TimeDelimited `json:"daily"`
+	Error     string        `json:"error"`
+	Flags     Flags         `json:"flags"`
+	Hourly    TimeDelimited `json:"hourly"`
+	Latitude  float64       `json:"latitude"`
+	Longitude float64       `json:"longitude"`
+	Offset    int           `json:"offset"`
+	Timezone  string        `json:"timezone"`
 }
 
-type City struct {
-	Id          int64       `json:"id"`
-	Name        string      `json:"name"`
-	Coordinates Coordinates `json:coord"`
-	Country     string      `json:"country"`
-	Population  int64       `json:"population"`
+type Alert struct {
+	Description string `json:"description"`
+	Expires     int64  `json:"expires"`
+	Time        int64  `json:"time"`
+	Title       string `json:"title"`
+	Uri         string `json:"uri"`
 }
 
-type Clouds struct {
-	All float64 `json:"all"`
-}
-
-type Coordinates struct {
-	Latitude  float64 `json:"lat"`
-	Longitude float64 `json:"lon"`
-}
-
-type DailyForecast struct {
-	City      City           `json:"city"`
-	Count     int            `json:"cnt"`
-	Message   float64        `json:"message"`
-	Status    string         `json:"cod"`
-	Forecasts []DailyWeather `json:"list"`
-}
-
-type DailyWeather struct {
-	Clouds      float64     `json:"clouds"`
-	Date        int64       `json:"dt"`
-	Degrees     float64     `json:"deg"`
-	Humidity    float64     `json:"humidity"`
-	Pressure    float64     `json:"pressure"`
-	Rain        float64     `json:"rain"`
-	Speed       float64     `json:"speed"`
-	Temperature Temperature `json:"temp"`
-	Weather     []Weather   `json:"weather"`
-}
-
-type Future struct {
-	ThreeHours float64 `json:"3h"`
-}
-
-type Temperature struct {
-	Humidity       float64 `json:"humidity"`
-	Pressure       float64 `json:"pressure"`
-	Temperature    float64 `json:"temp"`
-	TemperatureMax float64 `json:"temp_max"`
-	TemperatureMin float64 `json:"temp_min"`
-
-	Day     float64 `json:"day"`
-	Eve     float64 `json:"eve"`
-	Max     float64 `json:"max"`
-	Min     float64 `json:"min"`
-	Morning float64 `json:"morn"`
-	Night   float64 `json:"night"`
+type Flags struct {
+	Units string `json:"units"`
 }
 
 type Weather struct {
-	Id          int64  `json:"id"`
-	Description string `json:"description"`
-	Icon        string `json:"icon"`
-	Main        string `json:"main"`
+	ApparentTemperature        float64 `json:"apparentTemperature"`
+	ApparentTemperatureMax     float64 `json:"apparentTemperatureMax"`
+	ApparentTemperatureMaxTime int64   `json:"apparentTemperatureMaxTime"`
+	ApparentTemperatureMin     float64 `json:"apparentTemperatureMin"`
+	ApparentTemperatureMinTime int64   `json:"apparentTemperatureMinTime"`
+	CloudCover                 float64 `json:"cloudCover"`
+	DewPoint                   float64 `json:"dewPoint"`
+	Humidity                   float64 `json:"humidity"`
+	Icon                       string  `json:"icon"`
+	NearestStormDistance       float64 `json:"nearestStormDistance"`
+	NearestStormBearing        float64 `json:"nearestStormBearing"`
+	Ozone                      float64 `json:"ozone"`
+	PrecipIntensity            float64 `json:"precipIntensity"`
+	PrecipIntensityMax         float64 `json:"precipIntensityMax"`
+	PrecipIntensityMaxTime     int64   `json:"precipIntensityMaxTime"`
+	PrecipProbability          float64 `json:"precipProbability"`
+	PrecipType                 string  `json:"precipType"`
+	Pressure                   float64 `json:"pressure"`
+	Summary                    string  `json:"summary"`
+	SunriseTime                int64   `json:"sunriseTime"`
+	SunsetTime                 int64   `json:"sunsetTime"`
+	Temperature                float64 `json:"temperature"`
+	TemperatureMax             float64 `json:"temperatureMax"`
+	TemperatureMaxTime         int64   `json:"temperatureMaxTime"`
+	TemperatureMin             float64 `json:"temperatureMin"`
+	TemperatureMinTime         int64   `json:"temperatureMinTime"`
+	Time                       int64   `json:"time"`
+	Visibility                 float64 `json:"visibility"`
+	WindBearing                float64 `json:"windBearing"`
+	WindSpeed                  float64 `json:"windSpeed"`
 }
 
-type WeatherSys struct {
-	Country string  `json:"country"`
-	Message float64 `json:"message"`
-	Sunrise int64   `json:"sunrise"`
-	Sunset  int64   `json:"sunset"`
+type TimeDelimited struct {
+	Data    []Weather `json:"data"`
+	Icon    string    `json:"icon"`
+	Summary string    `json:"summary"`
 }
 
-type Wind struct {
-	Degrees float64 `json:"deg"`
-	Speed   float64 `json:"speed"`
-}
+func getForecast(data ForecastRequest) (forecast Forecast, err error) {
+	client := &http.Client{}
+	uri := "http://geocode.jessfraz.com/forecast"
 
-func getWeatherUri(geolocation GeoLocation, units string, days int) (uri string, err error) {
-	if units != "metric" && units != "imperial" {
-		return uri, fmt.Errorf("%s is not a valid unit. Valid units include metric & imperial.\n", units)
-	}
-
-	lat := strconv.FormatFloat(geolocation.Latitude, 'f', 6, 64)
-	long := strconv.FormatFloat(geolocation.Longitude, 'f', 6, 64)
-
-	api := "weather"
-
-	if days > 1 {
-		api = "forecast/daily"
-	}
-
-	uri = "http://api.openweathermap.org/data/2.5/" + api + "?lat=" + lat + "&lon=" + long + "&units=" + units + "&cnt=" + strconv.Itoa(days)
-
-	return uri, nil
-}
-
-func getDailyForecast(geolocation GeoLocation, units string, days int) (forecast DailyForecast, err error) {
-	url, err := getWeatherUri(geolocation, units, days)
+	req, err := createRequest(uri, "POST", data)
 	if err != nil {
 		return forecast, err
 	}
 
-	resp, err := http.Get(url)
+	resp, err := client.Do(req)
+	if err != nil {
+		return forecast, fmt.Errorf("Http request to %s failed: %s", req.URL, err.Error())
+	}
 	defer resp.Body.Close()
 
 	// decode the body
@@ -181,28 +209,11 @@ func getDailyForecast(geolocation GeoLocation, units string, days int) (forecast
 	resp.Body.Close()
 
 	if err != nil {
-		return forecast, fmt.Errorf("Decoding the response from %s failed: %s", url, err)
+		return forecast, fmt.Errorf("Decoding the response from %s failed: %s", req.URL, err)
 	}
 
-	return forecast, nil
-}
-
-func getForecast(geolocation GeoLocation, units string) (forecast Forecast, err error) {
-	url, err := getWeatherUri(geolocation, units, 0)
-	if err != nil {
-		return forecast, err
-	}
-
-	resp, err := http.Get(url)
-	defer resp.Body.Close()
-
-	// decode the body
-	dec := json.NewDecoder(resp.Body)
-	err = dec.Decode(&forecast)
-	resp.Body.Close()
-
-	if err != nil {
-		return forecast, fmt.Errorf("Decoding the response from %s failed: %s", url, err)
+	if forecast.Error != "" {
+		return forecast, fmt.Errorf("The response returned: %s", forecast.Error)
 	}
 
 	return forecast, nil

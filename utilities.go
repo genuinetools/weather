@@ -1,7 +1,10 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"github.com/mitchellh/colorstring"
 	"io/ioutil"
 	"math"
 	"net/http"
@@ -9,8 +12,21 @@ import (
 	"time"
 )
 
-func cleanString(s string) string {
-	return strings.TrimSpace(strings.ToLower(s))
+func createRequest(uri, method string, data interface{}) (req *http.Request, err error) {
+	// create json data
+	jsonByte, err := json.Marshal(data)
+	if err != nil {
+		return req, fmt.Errorf("Marshaling JSON for %s to %s failed: %s", method, uri, err.Error())
+	}
+
+	// send the request
+	req, err = http.NewRequest("POST", uri, bytes.NewReader(jsonByte))
+	if err != nil {
+		return req, fmt.Errorf("Creating the %s request to %s failed: %s", method, uri, err.Error())
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	return req, nil
 }
 
 func epochFormat(seconds int64) string {
@@ -23,45 +39,56 @@ func epochFormatDate(seconds int64) string {
 	return epochTime.Format("January 2")
 }
 
-func getIcon(sky string, isNight bool) (icon string, err error) {
-	uri := "http://jesss.s3.amazonaws.com/weather/icons/" + sky
-	if isNight {
-		uri += "_night"
+func epochFormatTime(seconds int64) string {
+	epochTime := time.Unix(0, seconds*int64(time.Second))
+	return epochTime.Format("3:04pm MST")
+}
+
+func getIcon(icon string) (iconTxt string, err error) {
+	color := "blue"
+
+	switch icon {
+	case "clear-day":
+		color = "yellow"
+	case "clear-night":
+		color = "light_yellow"
+	case "snow":
+		color = "white"
+	case "wind":
+		color = "black"
+	case "partly-cloudy-day":
+		color = "yellow"
+	case "partly-cloudy-night":
+		color = "light_yellow"
+	case "thunderstorm":
+		color = "black"
+	case "tornado":
+		color = "black"
 	}
+	uri := "http://jesss.s3.amazonaws.com/weather/icons/" + icon + ".txt"
 
-	resp, err := http.Get(uri + ".txt")
+	resp, err := http.Get(uri)
 	if err != nil {
-		// if it's a night icon, try for day
-		if isNight {
-			return getIcon(sky, false)
-		}
-
-		return icon, fmt.Errorf("Requesting icon (%s) failed: %s", sky, err)
+		return iconTxt, fmt.Errorf("Requesting icon (%s) failed: %s", icon, err)
 	}
 	defer resp.Body.Close()
 
 	// decode the body
 	out, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		// if it's a night icon, try for day
-		if isNight {
-			return getIcon(sky, false)
-		}
-
-		return icon, fmt.Errorf("Reading response body for icon (%s) failed: %s", sky, err)
+		return iconTxt, fmt.Errorf("Reading response body for icon (%s) failed: %s", icon, err)
 	}
 
-	icon = string(out)
+	iconTxt = string(out)
 
-	// if it's a night icon, try for day
-	if (isNight && icon == "") || (isNight && strings.Contains(icon, "<?xml")) {
-		return getIcon(sky, false)
+	if strings.Contains(iconTxt, "<?xml") {
+		return "", fmt.Errorf("No icon found for %s.", icon)
 	}
 
-	return icon, nil
+	return colorstring.Color("[" + color + "]" + iconTxt), nil
 }
 
-func getWindDetails(degrees float64) (direction string) {
+func getBearingDetails(degrees float64) (direction string) {
 	windDeg := (degrees + 11.25) / 22.5
 	directionInt := int(math.Abs(math.Remainder(windDeg, 16)))
 
@@ -70,6 +97,10 @@ func getWindDetails(degrees float64) (direction string) {
 	}
 
 	return direction
+}
+
+func printError(err error) {
+	fmt.Println(colorstring.Color("[red]" + err.Error()))
 }
 
 func Round(x float64, prec int) float64 {

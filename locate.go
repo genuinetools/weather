@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -47,24 +46,12 @@ type GeoLocation struct {
 	Timezone      string  `json:"timezone"`
 }
 
-func requestLocation(uri, method string, data interface{}) (geolocation GeoLocation, err error) {
+func requestLocation(req *http.Request) (geolocation GeoLocation, err error) {
 	client := &http.Client{}
 
-	// create json data
-	jsonByte, err := json.Marshal(data)
-	if err != nil {
-		return geolocation, fmt.Errorf("Marshaling JSON for %s to %s failed: %s", method, uri, err.Error())
-	}
-
-	// send the request
-	req, err := http.NewRequest(method, uri, bytes.NewReader(jsonByte))
-	if err != nil {
-		return geolocation, fmt.Errorf("Creating the %s request to %s failed: %s", method, uri, err.Error())
-	}
-	req.Header.Set("Content-Type", "application/json")
 	resp, err := client.Do(req)
 	if err != nil {
-		return geolocation, fmt.Errorf("%s to %s failed: %s", method, uri, err.Error())
+		return geolocation, fmt.Errorf("Http request to %s failed: %s", req.URL, err.Error())
 	}
 	defer resp.Body.Close()
 
@@ -74,7 +61,7 @@ func requestLocation(uri, method string, data interface{}) (geolocation GeoLocat
 	resp.Body.Close()
 
 	if err != nil {
-		return geolocation, fmt.Errorf("Decoding the response from %s failed: %s", uri, err)
+		return geolocation, fmt.Errorf("Decoding the response from %s failed: %s", req.URL, err)
 	}
 
 	return geolocation, nil
@@ -83,7 +70,11 @@ func requestLocation(uri, method string, data interface{}) (geolocation GeoLocat
 func autolocate() (geolocation GeoLocation, err error) {
 	uri := "http://www.telize.com/geoip"
 
-	return requestLocation(uri, "GET", map[string]string{})
+	req, err := createRequest(uri, "GET", map[string]string{})
+	if err != nil {
+		return geolocation, err
+	}
+	return requestLocation(req)
 }
 
 func locate(location string) (geolocation GeoLocation, err error) {
@@ -92,5 +83,11 @@ func locate(location string) (geolocation GeoLocation, err error) {
 	}
 
 	uri := "http://geocode.jessfraz.com/geocode"
-	return requestLocation(uri, "POST", map[string]string{"location": location})
+
+	req, err := createRequest(uri, "POST", map[string]string{"location": location})
+	if err != nil {
+		return geolocation, err
+	}
+
+	return requestLocation(req)
 }
