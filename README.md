@@ -2,6 +2,8 @@
 
 Get weather via the commandline.
 
+![Screenshot](screenshot.png)
+
 ### Installation
 
 ```bash
