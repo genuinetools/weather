@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 )
 
@@ -12,13 +13,18 @@ type ForecastRequest struct {
 	Exclude   []string `json:"exclude"`
 }
 
+const VERSION = "v0.1.0"
+
 func main() {
 	var location string
 	var units string
 	var days int
 	var ignoreAlerts bool
+	var version bool
 
 	// parse flags
+	flag.BoolVar(&version, "version", false, "print version and exit")
+	flag.BoolVar(&version, "v", false, "print version and exit (shorthand)")
 	flag.StringVar(&location, "location", "", "Location to get the weather")
 	flag.StringVar(&location, "l", "", "Location to get the weather (shorthand)")
 	flag.StringVar(&units, "units", "auto", "System of units")
@@ -27,6 +33,11 @@ func main() {
 	flag.IntVar(&days, "d", 0, "No. of days to get forecast (shorthand)")
 	flag.BoolVar(&ignoreAlerts, "ignore-alerts", false, "Ignore alerts in weather output")
 	flag.Parse()
+
+	if version {
+		fmt.Println(VERSION)
+		return
+	}
 
 	geolocation, err := locate(location)
 	if err != nil {
