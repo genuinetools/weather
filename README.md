@@ -135,3 +135,5 @@ $ weather -l "Manhattan Beach, CA"
 # The visibilty is 9.58 miles
 # The pressure is 1012.99 mbar
 ```
+
+[![Analytics](https://ga-beacon.appspot.com/UA-29404280-16/weather/README.md)](https://github.com/jfrazelle/weather)
