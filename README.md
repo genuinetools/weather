@@ -14,29 +14,13 @@ $ go get github.com/jfrazelle/weather
 
 #### Binaries
 
-- **darwin**
-    - [386](https://jesss.s3.amazonaws.com/weather/binaries/darwin/386/weather)
-    - [amd64](https://jesss.s3.amazonaws.com/weather/binaries/darwin/amd64/weather)
-- **freebsd**
-    - [386](https://jesss.s3.amazonaws.com/weather/binaries/freebsd/386/weather)
-    - [amd64](https://jesss.s3.amazonaws.com/weather/binaries/freebsd/amd64/weather)
-    - [arm](https://jesss.s3.amazonaws.com/weather/binaries/freebsd/arm/weather)
-- **linux**
-    - [386](https://jesss.s3.amazonaws.com/weather/binaries/linux/386/weather)
-    - [amd64](https://jesss.s3.amazonaws.com/weather/binaries/linux/amd64/weather)
-    - [arm](https://jesss.s3.amazonaws.com/weather/binaries/linux/arm/weather)
-- **netbsd**
-    - [386](https://jesss.s3.amazonaws.com/weather/binaries/netbsd/386/weather)
-    - [amd64](https://jesss.s3.amazonaws.com/weather/binaries/netbsd/amd64/weather)
-    - [arm](https://jesss.s3.amazonaws.com/weather/binaries/netbsd/arm/weather)
-- **openbsd**
-    - [386](https://jesss.s3.amazonaws.com/weather/binaries/openbsd/386/weather)
-    - [amd64](https://jesss.s3.amazonaws.com/weather/binaries/openbsd/amd64/weather)
-- **plan9**
-    - [386](https://jesss.s3.amazonaws.com/weather/binaries/plan9/386/weather)
-- **windows**
-    - [386](https://jesss.s3.amazonaws.com/weather/binaries/windows/386/weather.exe)
-    - [amd64](https://jesss.s3.amazonaws.com/weather/binaries/windows/amd64/weather.exe)
+- **darwin** [386](https://jesss.s3.amazonaws.com/weather/binaries/darwin/386/weather) / [amd64](https://jesss.s3.amazonaws.com/weather/binaries/darwin/amd64/weather)
+- **freebsd** [386](https://jesss.s3.amazonaws.com/weather/binaries/freebsd/386/weather) / [amd64](https://jesss.s3.amazonaws.com/weather/binaries/freebsd/amd64/weather) / [arm](https://jesss.s3.amazonaws.com/weather/binaries/freebsd/arm/weather)
+- **linux** [386](https://jesss.s3.amazonaws.com/weather/binaries/linux/386/weather) / [amd64](https://jesss.s3.amazonaws.com/weather/binaries/linux/amd64/weather) / [arm](https://jesss.s3.amazonaws.com/weather/binaries/linux/arm/weather)
+- **netbsd** [386](https://jesss.s3.amazonaws.com/weather/binaries/netbsd/386/weather) / [amd64](https://jesss.s3.amazonaws.com/weather/binaries/netbsd/amd64/weather) / [arm](https://jesss.s3.amazonaws.com/weather/binaries/netbsd/arm/weather)
+- **openbsd** [386](https://jesss.s3.amazonaws.com/weather/binaries/openbsd/386/weather) / [amd64](https://jesss.s3.amazonaws.com/weather/binaries/openbsd/amd64/weather)
+- **plan9** [386](https://jesss.s3.amazonaws.com/weather/binaries/plan9/386/weather)
+- **windows** [386](https://jesss.s3.amazonaws.com/weather/binaries/windows/386/weather.exe) / [amd64](https://jesss.s3.amazonaws.com/weather/binaries/windows/amd64/weather.exe)
 
 
 ## Usage
