@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/mitchellh/colorstring"
 	"io/ioutil"
 	"math"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/mitchellh/colorstring"
 )
 
 func createRequest(uri, method string, data interface{}) (req *http.Request, err error) {
@@ -65,7 +66,7 @@ func getIcon(icon string) (iconTxt string, err error) {
 	case "tornado":
 		color = "black"
 	}
-	uri := "http://jesss.s3.amazonaws.com/weather/icons/" + icon + ".txt"
+	uri := "https://jesss.s3.amazonaws.com/weather/icons/" + icon + ".txt"
 
 	resp, err := http.Get(uri)
 	if err != nil {

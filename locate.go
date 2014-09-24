@@ -82,7 +82,7 @@ func locate(location string) (geolocation GeoLocation, err error) {
 		return autolocate()
 	}
 
-	uri := "http://geocode.jessfraz.com/geocode"
+	uri := "https://geocode.jessfraz.com/geocode"
 
 	req, err := createRequest(uri, "POST", map[string]string{"location": location})
 	if err != nil {

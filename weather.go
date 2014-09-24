@@ -190,7 +190,7 @@ type TimeDelimited struct {
 
 func getForecast(data ForecastRequest) (forecast Forecast, err error) {
 	client := &http.Client{}
-	uri := "http://geocode.jessfraz.com/forecast"
+	uri := "https://geocode.jessfraz.com/forecast"
 
 	req, err := createRequest(uri, "POST", data)
 	if err != nil {
