@@ -1,6 +1,6 @@
 # weather
 
-Weather via the command line. Uses the [forecast.io](forecast.io) API so it's super accurate. Also includes any current weather alerts in the output.
+Weather via the command line. Uses the [forecast.io](http://forecast.io) API so it's super accurate. Also includes any current weather alerts in the output.
 
 ![Screenshot](screenshot.png)
 
