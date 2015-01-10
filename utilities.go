@@ -89,15 +89,9 @@ func getIcon(icon string) (iconTxt string, err error) {
 	return colorstring.Color("[" + color + "]" + iconTxt), nil
 }
 
-func getBearingDetails(degrees float64) (direction string) {
-	windDeg := (degrees + 11.25) / 22.5
-	directionInt := int(math.Abs(math.Remainder(windDeg, 16)))
-
-	if len(Directions) > directionInt && directionInt >= 0 {
-		direction = Directions[directionInt]
-	}
-
-	return direction
+func getBearingDetails(degrees float64) string {
+	index := int(math.Mod((degrees+11.25)/22.5, 16))
+	return Directions[index]
 }
 
 func printError(err error) {
