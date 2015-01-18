@@ -37,7 +37,7 @@ func epochFormat(seconds int64) string {
 
 func epochFormatDate(seconds int64) string {
 	epochTime := time.Unix(0, seconds*int64(time.Second))
-	return epochTime.Format("January 2")
+	return epochTime.Format("January 2 (Monday)")
 }
 
 func epochFormatTime(seconds int64) string {
