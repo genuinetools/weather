@@ -66,7 +66,7 @@ func getIcon(icon string) (iconTxt string, err error) {
 	case "tornado":
 		color = "black"
 	}
-	uri := "https://jesss.s3.amazonaws.com/weather/icons/" + icon + ".txt"
+	uri := "https://s3.j3ss.co/weather/icons/" + icon + ".txt"
 
 	resp, err := http.Get(uri)
 	if err != nil {
