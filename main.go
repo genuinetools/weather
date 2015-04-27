@@ -13,7 +13,7 @@ type ForecastRequest struct {
 	Exclude   []string `json:"exclude"`
 }
 
-const VERSION = "v0.1.0"
+const VERSION = "v0.2.0"
 
 func main() {
 	var location string
