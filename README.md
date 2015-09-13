@@ -105,7 +105,7 @@ $ weather -l "Manhattan Beach, CA"
 # The nearest storm is 18 miles NE away
 # The wind speed is 3.96 mph SE
 # The cloud coverage is 35%
-# The visibilty is 9.58 miles
+# The visibility is 9.58 miles
 # The pressure is 1012.99 mbar
 ```
 

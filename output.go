@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/mitchellh/colorstring"
 )
 
@@ -80,8 +81,8 @@ func printWeather(weather Weather, unitsFormat UnitMeasures) {
 	}
 
 	if weather.Visibility < 10 {
-		visibilty := colorstring.Color(fmt.Sprintf("[white]%v %s", weather.Visibility, unitsFormat.Length))
-		fmt.Printf("The visibilty is %s\n", visibilty)
+		visibility := colorstring.Color(fmt.Sprintf("[white]%v %s", weather.Visibility, unitsFormat.Length))
+		fmt.Printf("The visibility is %s\n", visibility)
 	}
 
 	if weather.Pressure > 0 {
