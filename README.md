@@ -12,17 +12,6 @@ Weather via the command line. Uses the [forecast.io](http://forecast.io) API so 
 $ go get github.com/jfrazelle/weather
 ```
 
-#### Binaries
-
-- **darwin** [386](https://s3.j3ss.co/weather/binaries/darwin/386/weather) / [amd64](https://s3.j3ss.co/weather/binaries/darwin/amd64/weather)
-- **freebsd** [386](https://s3.j3ss.co/weather/binaries/freebsd/386/weather) / [amd64](https://s3.j3ss.co/weather/binaries/freebsd/amd64/weather) / [arm](https://s3.j3ss.co/weather/binaries/freebsd/arm/weather)
-- **linux** [386](https://s3.j3ss.co/weather/binaries/linux/386/weather) / [amd64](https://s3.j3ss.co/weather/binaries/linux/amd64/weather) / [arm](https://s3.j3ss.co/weather/binaries/linux/arm/weather)
-- **netbsd** [386](https://s3.j3ss.co/weather/binaries/netbsd/386/weather) / [amd64](https://s3.j3ss.co/weather/binaries/netbsd/amd64/weather) / [arm](https://s3.j3ss.co/weather/binaries/netbsd/arm/weather)
-- **openbsd** [386](https://s3.j3ss.co/weather/binaries/openbsd/386/weather) / [amd64](https://s3.j3ss.co/weather/binaries/openbsd/amd64/weather)
-- **plan9** [386](https://s3.j3ss.co/weather/binaries/plan9/386/weather)
-- **windows** [386](https://s3.j3ss.co/weather/binaries/windows/386/weather.exe) / [amd64](https://s3.j3ss.co/weather/binaries/windows/amd64/weather.exe)
-
-
 ## Usage
 
 - **`--location, -l`:** Your address, can be in the format of just a zipcode or a city, state, or the full address. **defaults to auto locating you based off your ip**
