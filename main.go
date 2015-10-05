@@ -4,27 +4,36 @@ import (
 	"flag"
 	"fmt"
 	"os"
+
+	"github.com/jfrazelle/weather/forecast"
+	"github.com/jfrazelle/weather/geolocate"
+	"github.com/jfrazelle/weather/version"
+	"github.com/mitchellh/colorstring"
 )
 
-type ForecastRequest struct {
-	Latitude  float64  `json:"lat"`
-	Longitude float64  `json:"lng"`
-	Units     string   `json:"units"`
-	Exclude   []string `json:"exclude"`
+const (
+	forecastURI string = "https://geocode.jessfraz.com/forecast"
+)
+
+var (
+	location     string
+	units        string
+	days         int
+	ignoreAlerts bool
+	vrsn         bool
+
+	geolocation geolocate.Geolocation
+)
+
+func printError(err error) {
+	fmt.Println(colorstring.Color("[red]" + err.Error()))
+	os.Exit(1)
 }
 
-const VERSION = "v0.2.0"
-
-func main() {
-	var location string
-	var units string
-	var days int
-	var ignoreAlerts bool
-	var version bool
-
+func init() {
 	// parse flags
-	flag.BoolVar(&version, "version", false, "print version and exit")
-	flag.BoolVar(&version, "v", false, "print version and exit (shorthand)")
+	flag.BoolVar(&vrsn, "version", false, "print version and exit")
+	flag.BoolVar(&vrsn, "v", false, "print version and exit (shorthand)")
 	flag.StringVar(&location, "location", "", "Location to get the weather")
 	flag.StringVar(&location, "l", "", "Location to get the weather (shorthand)")
 	flag.StringVar(&units, "units", "auto", "System of units")
@@ -33,34 +42,46 @@ func main() {
 	flag.IntVar(&days, "d", 0, "No. of days to get forecast (shorthand)")
 	flag.BoolVar(&ignoreAlerts, "ignore-alerts", false, "Ignore alerts in weather output")
 	flag.Parse()
+}
 
-	if version {
-		fmt.Println(VERSION)
+func main() {
+	if vrsn {
+		fmt.Printf("weather version %s, build %s", version.VERSION, version.GITCOMMIT)
 		return
 	}
 
-	geolocation, err := locate(location)
-	if err != nil {
-		printError(err)
-		os.Exit(1)
+	var err error
+	if location == "" {
+		// auto locate them if we are not given a location
+		geolocation, err = geolocate.Autolocate()
+		if err != nil {
+			printError(err)
+		}
+	} else {
+		// get geolocation data for the given location
+		geolocation, err = geolocate.Locate(location)
+		if err != nil {
+			printError(err)
+		}
 	}
 
-	data := ForecastRequest{
+	data := forecast.Request{
 		Latitude:  geolocation.Latitude,
 		Longitude: geolocation.Longitude,
 		Units:     units,
 		Exclude:   []string{"hourly", "minutely"},
 	}
 
-	forecast, err := getForecast(data)
+	fc, err := forecast.Get(forecastURI, data)
 	if err != nil {
 		printError(err)
-		os.Exit(1)
 	}
 
-	printCurrentWeather(forecast, geolocation, ignoreAlerts)
+	if err := forecast.PrintCurrent(fc, geolocation, ignoreAlerts); err != nil {
+		printError(err)
+	}
 
 	if days > 1 {
-		printDailyWeather(forecast, days)
+		forecast.PrintDaily(fc, days)
 	}
 }

@@ -1,6 +1,7 @@
-package main
+package forecast
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -123,6 +124,8 @@ import (
 //     "timezone": "America/Phoenix"
 // }
 
+// Forecast contains the information returned from the server
+// when requesting the forecast
 type Forecast struct {
 	Alerts    []Alert       `json:"alerts"`
 	Currently Weather       `json:"currently"`
@@ -137,18 +140,21 @@ type Forecast struct {
 	Timezone  string        `json:"timezone"`
 }
 
+// Alert contains any weather alerts happening at the location
 type Alert struct {
 	Description string `json:"description"`
 	Expires     int64  `json:"expires"`
 	Time        int64  `json:"time"`
 	Title       string `json:"title"`
-	Uri         string `json:"uri"`
+	URI         string `json:"uri"`
 }
 
+// Flags describes the flags on a forecast
 type Flags struct {
 	Units string `json:"units"`
 }
 
+// Weather describes details about the weather for the location
 type Weather struct {
 	ApparentTemperature        float64 `json:"apparentTemperature"`
 	ApparentTemperatureMax     float64 `json:"apparentTemperatureMax"`
@@ -182,21 +188,37 @@ type Weather struct {
 	WindSpeed                  float64 `json:"windSpeed"`
 }
 
+// TimeDelimited describes the data for the time series
 type TimeDelimited struct {
 	Data    []Weather `json:"data"`
 	Icon    string    `json:"icon"`
 	Summary string    `json:"summary"`
 }
 
-func getForecast(data ForecastRequest) (forecast Forecast, err error) {
-	client := &http.Client{}
-	uri := "https://geocode.jessfraz.com/forecast"
+// Request describes the request posted to the forecast api
+type Request struct {
+	Latitude  float64  `json:"lat"`
+	Longitude float64  `json:"lng"`
+	Units     string   `json:"units"`
+	Exclude   []string `json:"exclude"`
+}
 
-	req, err := createRequest(uri, "POST", data)
+// Get performs a request to get the forecast data for a location
+func Get(uri string, data Request) (forecast Forecast, err error) {
+	// create json data
+	jsonByte, err := json.Marshal(data)
 	if err != nil {
-		return forecast, err
+		return forecast, fmt.Errorf("Marshaling forecast json failed: %v", err)
 	}
 
+	// send the request
+	req, err := http.NewRequest("POST", uri, bytes.NewReader(jsonByte))
+	if err != nil {
+		return forecast, nil
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		return forecast, fmt.Errorf("Http request to %s failed: %s", req.URL, err.Error())
@@ -205,15 +227,12 @@ func getForecast(data ForecastRequest) (forecast Forecast, err error) {
 
 	// decode the body
 	dec := json.NewDecoder(resp.Body)
-	err = dec.Decode(&forecast)
-	resp.Body.Close()
-
-	if err != nil {
-		return forecast, fmt.Errorf("Decoding the response from %s failed: %s", req.URL, err)
+	if err = dec.Decode(&forecast); err != nil {
+		return forecast, fmt.Errorf("Decoding forecast response failed: %v", err)
 	}
 
 	if forecast.Error != "" {
-		return forecast, fmt.Errorf("The response returned: %s", forecast.Error)
+		return forecast, fmt.Errorf("Forecast response returned: %s", forecast.Error)
 	}
 
 	return forecast, nil

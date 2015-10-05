@@ -1,11 +1,18 @@
-package main
+package forecast
 
 import (
 	"fmt"
+	"io/ioutil"
+	"math"
+	"net/http"
+	"strings"
+	"time"
 
+	"github.com/jfrazelle/weather/geolocate"
 	"github.com/mitchellh/colorstring"
 )
 
+// UnitMeasures are the location specific terms for weather data
 type UnitMeasures struct {
 	Degrees       string
 	Speed         string
@@ -14,7 +21,8 @@ type UnitMeasures struct {
 }
 
 var (
-	UnitFormats map[string]UnitMeasures = map[string]UnitMeasures{
+	// UnitFormats describe each regions UnitMeasures
+	UnitFormats = map[string]UnitMeasures{
 		"us": UnitMeasures{
 			Degrees:       "°F",
 			Speed:         "mph",
@@ -40,12 +48,77 @@ var (
 			Precipitation: "mm/h",
 		},
 	}
-	Directions []string = []string{
+	// Directions contain all the combinations of N,S,E,W
+	Directions = []string{
 		"N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW",
 	}
 )
 
-func printWeather(weather Weather, unitsFormat UnitMeasures) {
+func epochFormat(seconds int64) string {
+	epochTime := time.Unix(0, seconds*int64(time.Second))
+	return epochTime.Format("January 2 at 3:04pm MST")
+}
+
+func epochFormatDate(seconds int64) string {
+	epochTime := time.Unix(0, seconds*int64(time.Second))
+	return epochTime.Format("January 2 (Monday)")
+}
+
+func epochFormatTime(seconds int64) string {
+	epochTime := time.Unix(0, seconds*int64(time.Second))
+	return epochTime.Format("3:04pm MST")
+}
+
+func getIcon(icon string) (iconTxt string, err error) {
+	color := "blue"
+
+	switch icon {
+	case "clear-day":
+		color = "yellow"
+	case "clear-night":
+		color = "light_yellow"
+	case "snow":
+		color = "white"
+	case "wind":
+		color = "black"
+	case "partly-cloudy-day":
+		color = "yellow"
+	case "partly-cloudy-night":
+		color = "light_yellow"
+	case "thunderstorm":
+		color = "black"
+	case "tornado":
+		color = "black"
+	}
+	uri := "https://s3.j3ss.co/weather/icons/" + icon + ".txt"
+
+	resp, err := http.Get(uri)
+	if err != nil {
+		return iconTxt, fmt.Errorf("Requesting icon (%s) failed: %s", icon, err)
+	}
+	defer resp.Body.Close()
+
+	// decode the body
+	out, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return iconTxt, fmt.Errorf("Reading response body for icon (%s) failed: %s", icon, err)
+	}
+
+	iconTxt = string(out)
+
+	if strings.Contains(iconTxt, "<?xml") {
+		return "", fmt.Errorf("No icon found for %s.", icon)
+	}
+
+	return colorstring.Color("[" + color + "]" + iconTxt), nil
+}
+
+func getBearingDetails(degrees float64) string {
+	index := int(math.Mod((degrees+11.25)/22.5, 16))
+	return Directions[index]
+}
+
+func printCommon(weather Weather, unitsFormat UnitMeasures) error {
 	if weather.Humidity > 0 {
 		humidity := colorstring.Color(fmt.Sprintf("[white]%v%s", weather.Humidity*100, "%"))
 		if weather.Humidity > 0.20 {
@@ -89,17 +162,20 @@ func printWeather(weather Weather, unitsFormat UnitMeasures) {
 		pressure := colorstring.Color(fmt.Sprintf("[white]%v %s", weather.Pressure, "mbar"))
 		fmt.Printf("The pressure is %s\n", pressure)
 	}
+
+	return nil
 }
 
-func printCurrentWeather(forecast Forecast, geolocation GeoLocation, ignoreAlerts bool) {
+// PrintCurrent pretty prints the current forecast data
+func PrintCurrent(forecast Forecast, geolocation geolocate.Geolocation, ignoreAlerts bool) error {
 	unitsFormat := UnitFormats[forecast.Flags.Units]
 
 	icon, err := getIcon(forecast.Currently.Icon)
 	if err != nil {
-		printError(err)
-	} else {
-		fmt.Println(icon)
+		return err
 	}
+
+	fmt.Println(icon)
 
 	location := colorstring.Color(fmt.Sprintf("[green]%s in %s", geolocation.City, geolocation.Region))
 	fmt.Printf("\nCurrent weather is %s in %s for %s\n", colorstring.Color("[cyan]"+forecast.Currently.Summary), location, colorstring.Color("[cyan]"+epochFormat(forecast.Currently.Time)))
@@ -121,10 +197,11 @@ func printCurrentWeather(forecast Forecast, geolocation GeoLocation, ignoreAlert
 		}
 	}
 
-	printWeather(forecast.Currently, unitsFormat)
+	return printCommon(forecast.Currently, unitsFormat)
 }
 
-func printDailyWeather(forecast Forecast, days int) {
+// PrintDaily pretty prints the daily forecast data
+func PrintDaily(forecast Forecast, days int) error {
 	unitsFormat := UnitFormats[forecast.Flags.Units]
 
 	fmt.Println(colorstring.Color("\n[white]" + fmt.Sprintf("%v Day Forecast", days)))
@@ -143,6 +220,8 @@ func printDailyWeather(forecast Forecast, days int) {
 		feelsLikeMin := colorstring.Color(fmt.Sprintf("[cyan]%v%s", daily.ApparentTemperatureMin, unitsFormat.Degrees))
 		fmt.Printf("The temperature high is %s, feels like %s around %s, and low is %s, feels like %s around %s\n\n", tempMax, feelsLikeMax, epochFormatTime(daily.TemperatureMaxTime), tempMin, feelsLikeMin, epochFormatTime(daily.TemperatureMinTime))
 
-		printWeather(daily, unitsFormat)
+		printCommon(daily, unitsFormat)
 	}
+
+	return nil
 }
