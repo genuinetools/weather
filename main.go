@@ -44,6 +44,8 @@ func init() {
 	flag.Parse()
 }
 
+//go:generate go run icons/generate/generate.go
+
 func main() {
 	if vrsn {
 		fmt.Printf("weather version %s, build %s", version.VERSION, version.GITCOMMIT)

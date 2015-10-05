@@ -2,13 +2,12 @@ package forecast
 
 import (
 	"fmt"
-	"io/ioutil"
 	"math"
-	"net/http"
 	"strings"
 	"time"
 
 	"github.com/jfrazelle/weather/geolocate"
+	"github.com/jfrazelle/weather/icons"
 	"github.com/mitchellh/colorstring"
 )
 
@@ -69,48 +68,59 @@ func epochFormatTime(seconds int64) string {
 	return epochTime.Format("3:04pm MST")
 }
 
-func getIcon(icon string) (iconTxt string, err error) {
+func getIcon(iconStr string) (icon string, err error) {
 	color := "blue"
+	// steralize the icon string name
+	iconStr = strings.Replace(strings.Replace(iconStr, "-", "", -1), "_", "", -1)
 
-	switch icon {
-	case "clear-day":
+	switch iconStr {
+	case "clear":
+		icon = icons.Clear
+	case "clearday":
 		color = "yellow"
-	case "clear-night":
+		icon = icons.Clearday
+	case "clearnight":
 		color = "light_yellow"
+		icon = icons.Clearnight
+	case "clouds":
+		icon = icons.Clouds
+	case "cloudy":
+		icon = icons.Cloudy
+	case "cloudsnight":
+		color = "light_yellow"
+		icon = icons.Cloudsnight
+	case "fog":
+		icon = icons.Fog
+	case "haze":
+		icon = icons.Haze
+	case "hazenight":
+		color = "light_yellow"
+		icon = icons.Hazenight
+	case "partlycloudyday":
+		color = "yellow"
+		icon = icons.Partlycloudyday
+	case "partlycloudynight":
+		color = "light_yellow"
+		icon = icons.Partlycloudynight
+	case "rain":
+		icon = icons.Rain
+	case "sleet":
+		icon = icons.Sleet
 	case "snow":
 		color = "white"
-	case "wind":
-		color = "black"
-	case "partly-cloudy-day":
-		color = "yellow"
-	case "partly-cloudy-night":
-		color = "light_yellow"
+		icon = icons.Snow
 	case "thunderstorm":
 		color = "black"
+		icon = icons.Thunderstorm
 	case "tornado":
 		color = "black"
-	}
-	uri := "https://s3.j3ss.co/weather/icons/" + icon + ".txt"
-
-	resp, err := http.Get(uri)
-	if err != nil {
-		return iconTxt, fmt.Errorf("Requesting icon (%s) failed: %s", icon, err)
-	}
-	defer resp.Body.Close()
-
-	// decode the body
-	out, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return iconTxt, fmt.Errorf("Reading response body for icon (%s) failed: %s", icon, err)
+		icon = icons.Tornado
+	case "wind":
+		color = "black"
+		icon = icons.Wind
 	}
 
-	iconTxt = string(out)
-
-	if strings.Contains(iconTxt, "<?xml") {
-		return "", fmt.Errorf("No icon found for %s.", icon)
-	}
-
-	return colorstring.Color("[" + color + "]" + iconTxt), nil
+	return colorstring.Color("[" + color + "]" + icon), nil
 }
 
 func getBearingDetails(degrees float64) string {
