@@ -33,22 +33,24 @@ const (
 //     country_code3: "USA"
 // }
 type Geolocation struct {
-	AreaCode      string  `json:"area_code"`
-	Asn           string  `json:"asn"`
-	City          string  `json:"city"`
-	ContinentCode string  `json:"continent_code"`
-	Country       string  `json:"country"`
-	CountryCode   string  `json:"country_code"`
-	CountryCode3  string  `json:"country_code3"`
-	DMACode       string  `json:"dma_code"`
-	IP            string  `json:"ip"`
-	Isp           string  `json:"isp"`
-	Latitude      float64 `json:"latitude"`
-	Longitude     float64 `json:"longitude"`
-	PostalCode    string  `json:"postal_code"`
-	Region        string  `json:"region"`
-	RegionCode    string  `json:"region_code"`
-	Timezone      string  `json:"timezone"`
+	AreaCode        string  `json:"area_code"`
+	Asn             string  `json:"asn"`
+	City            string  `json:"city"`
+	ContinentCode   string  `json:"continent_code"`
+	Country         string  `json:"country"`
+	CountryCode     string  `json:"country_code"`
+	CountryCode3    string  `json:"country_code3"`
+	DMACode         string  `json:"dma_code"`
+	IP              string  `json:"ip"`
+	Isp             string  `json:"isp"`
+	Latitude        float64 `json:"latitude"`
+	Longitude       float64 `json:"longitude"`
+	PostalCode      string  `json:"postal_code"`
+	Region          string  `json:"region"`
+	RegionCode      string  `json:"region_code"`
+	Timezone        string  `json:"timezone"`
+	ApiError        bool    `json:"error"`
+	ApiErrorMessage string  `json:"message"`
 }
 
 // Autolocate gets the requesters geolocation based off their IP address
@@ -95,6 +97,9 @@ func Locate(location string) (geolocation Geolocation, err error) {
 	dec := json.NewDecoder(resp.Body)
 	if err := dec.Decode(&geolocation); err != nil {
 		return geolocation, fmt.Errorf("Decoding geolocate response failed: %v", err)
+	}
+	if geolocation.ApiError {
+		return geolocation, fmt.Errorf("Api error: %s", geolocation.ApiErrorMessage)
 	}
 
 	return geolocation, nil
