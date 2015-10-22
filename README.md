@@ -1,5 +1,7 @@
 # weather
 
+[![Circle CI](https://circleci.com/gh/jfrazelle/weather.svg?style=svg)](https://circleci.com/gh/jfrazelle/weather)
+
 Weather via the command line. Uses the [forecast.io](http://forecast.io) API so it's super accurate. Also includes any current weather alerts in the output.
 
 ![Screenshot](screenshot.png)
