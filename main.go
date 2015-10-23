@@ -6,13 +6,13 @@ import (
 	"os"
 
 	"github.com/jfrazelle/weather/forecast"
-	"github.com/jfrazelle/weather/geolocate"
+	"github.com/jfrazelle/weather/geocode"
 	"github.com/jfrazelle/weather/version"
 	"github.com/mitchellh/colorstring"
 )
 
 const (
-	forecastURI string = "https://geocode.jessfraz.com/forecast"
+	defaultServerURI string = "https://geocode.jessfraz.com"
 )
 
 var (
@@ -20,9 +20,10 @@ var (
 	units        string
 	days         int
 	ignoreAlerts bool
+	server       string
 	vrsn         bool
 
-	geolocation geolocate.Geolocation
+	geo geocode.Geocode
 )
 
 func printError(err error) {
@@ -38,10 +39,21 @@ func init() {
 	flag.StringVar(&location, "l", "", "Location to get the weather (shorthand)")
 	flag.StringVar(&units, "units", "auto", "System of units")
 	flag.StringVar(&units, "u", "auto", "System of units (shorthand)")
+	flag.StringVar(&server, "server", defaultServerURI, "Weather API server uri")
+	flag.StringVar(&server, "s", defaultServerURI, "Weather API server uri (shorthand)")
 	flag.IntVar(&days, "days", 0, "No. of days to get forecast")
 	flag.IntVar(&days, "d", 0, "No. of days to get forecast (shorthand)")
 	flag.BoolVar(&ignoreAlerts, "ignore-alerts", false, "Ignore alerts in weather output")
+
+	flag.Usage = func() {
+		flag.PrintDefaults()
+	}
+
 	flag.Parse()
+
+	if server == "" {
+		usageAndExit("Please enter a Weather API server uri or leave blank to use the default.", 0)
+	}
 }
 
 //go:generate go run icons/generate/generate.go
@@ -55,35 +67,45 @@ func main() {
 	var err error
 	if location == "" {
 		// auto locate them if we are not given a location
-		geolocation, err = geolocate.Autolocate()
+		geo, err = geocode.Autolocate()
 		if err != nil {
 			printError(err)
 		}
 	} else {
 		// get geolocation data for the given location
-		geolocation, err = geolocate.Locate(location)
+		geo, err = geocode.Locate(location, server)
 		if err != nil {
 			printError(err)
 		}
 	}
 
 	data := forecast.Request{
-		Latitude:  geolocation.Latitude,
-		Longitude: geolocation.Longitude,
+		Latitude:  geo.Latitude,
+		Longitude: geo.Longitude,
 		Units:     units,
 		Exclude:   []string{"hourly", "minutely"},
 	}
 
-	fc, err := forecast.Get(forecastURI, data)
+	fc, err := forecast.Get(fmt.Sprintf("%s/forecast", server), data)
 	if err != nil {
 		printError(err)
 	}
 
-	if err := forecast.PrintCurrent(fc, geolocation, ignoreAlerts); err != nil {
+	if err := forecast.PrintCurrent(fc, geo, ignoreAlerts); err != nil {
 		printError(err)
 	}
 
 	if days > 1 {
 		forecast.PrintDaily(fc, days)
 	}
+}
+
+func usageAndExit(message string, exitCode int) {
+	if message != "" {
+		fmt.Fprintf(os.Stderr, message)
+		fmt.Fprintf(os.Stderr, "\n\n")
+	}
+	flag.Usage()
+	fmt.Fprintf(os.Stderr, "\n")
+	os.Exit(exitCode)
 }

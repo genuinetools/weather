@@ -232,7 +232,7 @@ func Get(uri string, data Request) (forecast Forecast, err error) {
 	}
 
 	if forecast.Error != "" {
-		return forecast, fmt.Errorf("Forecast response returned: %s", forecast.Error)
+		return forecast, fmt.Errorf("Forecast API response error: %s", forecast.Error)
 	}
 
 	return forecast, nil

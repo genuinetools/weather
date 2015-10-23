@@ -28,6 +28,8 @@ $ go get github.com/jfrazelle/weather
     for more information on units see [the forecast.io api](https://developer.forecast.io/docs/v2#options)
 - **`--days, -d`:** Days of weather to retrieve. **defaults to the current weather, ie. 0 or 1**
 - **`--ignore-alerts`:** Don't print alerts in weather output. **defaults false**
+- **`--server, -s`:** Weather API server uri **defaults to  "https://geocode.jessfraz.com"**
+
 
 ### Examples
 

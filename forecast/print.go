@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jfrazelle/weather/geolocate"
+	"github.com/jfrazelle/weather/geocode"
 	"github.com/jfrazelle/weather/icons"
 	"github.com/mitchellh/colorstring"
 )
@@ -177,7 +177,7 @@ func printCommon(weather Weather, unitsFormat UnitMeasures) error {
 }
 
 // PrintCurrent pretty prints the current forecast data
-func PrintCurrent(forecast Forecast, geolocation geolocate.Geolocation, ignoreAlerts bool) error {
+func PrintCurrent(forecast Forecast, geolocation geocode.Geocode, ignoreAlerts bool) error {
 	unitsFormat := UnitFormats[forecast.Flags.Units]
 
 	icon, err := getIcon(forecast.Currently.Icon)
