@@ -21,3 +21,14 @@ Usage of ./weather-server:
   -p string
         port for server to run on (default "1234")
 ```
+
+### Run with Docker
+
+```
+$ docker run --restart always -d \
+    --name weather-server \
+    -p 1234:1234 \
+    jess/weather-server \
+    --geocode-apikey "YOUR_GOOGLE_GEOCODING_APIKEY" \
+    --forecast-apikey "YOUR_FORECAST.IO_APIKEY"
+```
