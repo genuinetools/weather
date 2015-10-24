@@ -24,7 +24,7 @@ $ go get github.com/jfrazelle/weather
 ## Usage
 
 - **`--location, -l`:** Your address, can be in the format of just a zipcode or a city, state, or the full address. **defaults to auto locating you based off your ip**
-- **`--units, -u`:** The unit system to use. **defaults to `auto`**, other option is `us`, `si`, `uk`, `ca`
+- **`--units, -u`:** The unit system to use. **defaults to `auto`**, other options are `us`, `si`, `uk`, `uk2`, `ca`
     for more information on units see [the forecast.io api](https://developer.forecast.io/docs/v2#options)
 - **`--days, -d`:** Days of weather to retrieve. **defaults to the current weather, ie. 0 or 1**
 - **`--ignore-alerts`:** Don't print alerts in weather output. **defaults false**
