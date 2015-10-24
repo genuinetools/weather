@@ -192,7 +192,11 @@ func PrintCurrent(forecast Forecast, geolocation geocode.Geocode, ignoreAlerts b
 
 	temp := colorstring.Color(fmt.Sprintf("[magenta]%v%s", forecast.Currently.Temperature, unitsFormat.Degrees))
 	feelslike := colorstring.Color(fmt.Sprintf("[magenta]%v%s", forecast.Currently.ApparentTemperature, unitsFormat.Degrees))
-	fmt.Printf("The temperature is %s, but it feels like %s\n\n", temp, feelslike)
+	if temp == feelslike {
+		fmt.Printf("The temperature is %s\n\n", temp)
+	} else {
+		fmt.Printf("The temperature is %s, but it feels like %s\n\n", temp, feelslike)
+	}
 
 	if !ignoreAlerts {
 		for _, alert := range forecast.Alerts {
