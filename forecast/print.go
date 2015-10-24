@@ -40,10 +40,17 @@ var (
 			Length:        "kilometers",
 			Precipitation: "mm/h",
 		},
+		// deprecated, use "uk2" in stead
 		"uk": UnitMeasures{
 			Degrees:       "°C",
 			Speed:         "mph",
 			Length:        "kilometers",
+			Precipitation: "mm/h",
+		},
+		"uk2": UnitMeasures{
+			Degrees:       "°C",
+			Speed:         "mph",
+			Length:        "miles",
 			Precipitation: "mm/h",
 		},
 	}
