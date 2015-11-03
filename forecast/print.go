@@ -11,7 +11,7 @@ import (
 	"github.com/mitchellh/colorstring"
 )
 
-// UnitMeasures are the location specific terms for weather data
+// UnitMeasures are the location specific terms for weather data.
 type UnitMeasures struct {
 	Degrees       string
 	Speed         string
@@ -20,7 +20,7 @@ type UnitMeasures struct {
 }
 
 var (
-	// UnitFormats describe each regions UnitMeasures
+	// UnitFormats describe each regions UnitMeasures.
 	UnitFormats = map[string]UnitMeasures{
 		"us": UnitMeasures{
 			Degrees:       "°F",
@@ -183,7 +183,7 @@ func printCommon(weather Weather, unitsFormat UnitMeasures) error {
 	return nil
 }
 
-// PrintCurrent pretty prints the current forecast data
+// PrintCurrent pretty prints the current forecast data.
 func PrintCurrent(forecast Forecast, geolocation geocode.Geocode, ignoreAlerts bool) error {
 	unitsFormat := UnitFormats[forecast.Flags.Units]
 
@@ -221,7 +221,7 @@ func PrintCurrent(forecast Forecast, geolocation geocode.Geocode, ignoreAlerts b
 	return printCommon(forecast.Currently, unitsFormat)
 }
 
-// PrintDaily pretty prints the daily forecast data
+// PrintDaily pretty prints the daily forecast data.
 func PrintDaily(forecast Forecast, days int) error {
 	unitsFormat := UnitFormats[forecast.Flags.Units]
 

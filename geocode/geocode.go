@@ -51,7 +51,7 @@ type Geocode struct {
 	Timezone      string  `json:"timezone"`
 }
 
-// Request describes the request posted to the geocode api
+// Request describes the request posted to the geocode api.
 type Request struct {
 	Location string `json:"location"`
 }
@@ -123,7 +123,7 @@ type Response struct {
 	ErrorMessage string   `json:"error_message"`
 }
 
-// Result is the result from the Google geocoding API
+// Result is the result from the Google geocoding API.
 type Result struct {
 	AddressComponents []Address `json:"address_components"`
 	FormattedAddress  string    `json:"formatted_address"`
@@ -132,14 +132,14 @@ type Result struct {
 	Types             []string  `json:"types"`
 }
 
-// Address contains details of a place
+// Address contains details of a place.
 type Address struct {
 	LongName  string   `json:"long_name"`
 	ShortName string   `json:"short_name"`
 	Types     []string `json:"types"`
 }
 
-// Geometry contains location data
+// Geometry contains location data.
 type Geometry struct {
 	Bounds       map[string]Location `json:"bounds"`
 	Location     Location            `json:"location"`
@@ -147,13 +147,13 @@ type Geometry struct {
 	Viewport     map[string]Location `json:"viewport"`
 }
 
-// Location contains lat and lng
+// Location contains lat and lng.
 type Location struct {
 	Latitude  float64 `json:"lat"`
 	Longitude float64 `json:"lng"`
 }
 
-// Autolocate gets the requesters geocode response based off their IP address
+// Autolocate gets the requesters geocode response based off their IP address.
 func Autolocate() (geocode Geocode, err error) {
 	// send the request
 	resp, err := http.Get(geoipURI)
@@ -171,7 +171,7 @@ func Autolocate() (geocode Geocode, err error) {
 	return geocode, nil
 }
 
-// Locate gets the geocode data of a location that is passed as a string
+// Locate gets the geocode data of a location that is passed as a string.
 func Locate(location, server string) (geocode Geocode, err error) {
 	// create json data
 	jsonByte, err := json.Marshal(Request{Location: location})

@@ -125,7 +125,7 @@ import (
 // }
 
 // Forecast contains the information returned from the server
-// when requesting the forecast
+// when requesting the forecast.
 type Forecast struct {
 	Alerts    []Alert       `json:"alerts"`
 	Currently Weather       `json:"currently"`
@@ -140,7 +140,7 @@ type Forecast struct {
 	Timezone  string        `json:"timezone"`
 }
 
-// Alert contains any weather alerts happening at the location
+// Alert contains any weather alerts happening at the location.
 type Alert struct {
 	Description string `json:"description"`
 	Expires     int64  `json:"expires"`
@@ -149,12 +149,12 @@ type Alert struct {
 	URI         string `json:"uri"`
 }
 
-// Flags describes the flags on a forecast
+// Flags describes the flags on a forecast.
 type Flags struct {
 	Units string `json:"units"`
 }
 
-// Weather describes details about the weather for the location
+// Weather describes details about the weather for the location.
 type Weather struct {
 	ApparentTemperature        float64 `json:"apparentTemperature"`
 	ApparentTemperatureMax     float64 `json:"apparentTemperatureMax"`
@@ -188,14 +188,14 @@ type Weather struct {
 	WindSpeed                  float64 `json:"windSpeed"`
 }
 
-// TimeDelimited describes the data for the time series
+// TimeDelimited describes the data for the time series.
 type TimeDelimited struct {
 	Data    []Weather `json:"data"`
 	Icon    string    `json:"icon"`
 	Summary string    `json:"summary"`
 }
 
-// Request describes the request posted to the forecast api
+// Request describes the request posted to the forecast api.
 type Request struct {
 	Latitude  float64  `json:"lat"`
 	Longitude float64  `json:"lng"`
@@ -203,7 +203,7 @@ type Request struct {
 	Exclude   []string `json:"exclude"`
 }
 
-// Get performs a request to get the forecast data for a location
+// Get performs a request to get the forecast data for a location.
 func Get(uri string, data Request) (forecast Forecast, err error) {
 	// create json data
 	jsonByte, err := json.Marshal(data)
