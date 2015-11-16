@@ -8,11 +8,10 @@ import (
 )
 
 const (
-	geoipURI string = "http://www.telize.com/geoip"
+	geoipURI string = "http://ip-api.com/json?fields=216"
 )
 
-// Geocode response from www.telize.com/geoip
-// comes back like:
+// Geocode response comes back like:
 // {
 //     timezone: "America/New_York",
 //     isp: "Road Runner HoldCo LLC",
@@ -153,6 +152,15 @@ type Location struct {
 	Longitude float64 `json:"lng"`
 }
 
+// ip-api.com response - we only request and decode fields that we use
+// http://ip-api.com/docs/api:returned_values#field_generator
+type IPAPIResponse struct {
+	RegionName string  `json:"regionName"`
+	City       string  `json:"city"`
+	Lat        float64 `json:"lat"`
+	Lon        float64 `json:"lon"`
+}
+
 // Autolocate gets the requesters geocode response based off their IP address.
 func Autolocate() (geocode Geocode, err error) {
 	// send the request
@@ -163,12 +171,18 @@ func Autolocate() (geocode Geocode, err error) {
 	defer resp.Body.Close()
 
 	// decode the body
+	var respObj IPAPIResponse
 	dec := json.NewDecoder(resp.Body)
-	if err := dec.Decode(&geocode); err != nil {
+	if err := dec.Decode(&respObj); err != nil {
 		return geocode, fmt.Errorf("Decoding autolocate response failed: %v", err)
 	}
 
-	return geocode, nil
+	return Geocode{
+		Latitude:  respObj.Lat,
+		Longitude: respObj.Lon,
+		City:      respObj.City,
+		Region:    respObj.RegionName,
+	}, nil
 }
 
 // Locate gets the geocode data of a location that is passed as a string.
