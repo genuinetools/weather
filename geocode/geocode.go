@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	geoipURI string = "http://www.telize.com/geoip"
+	geoipURI string = "https://telize.j3ss.co/geoip"
 )
 
 // Geocode response from www.telize.com/geoip
