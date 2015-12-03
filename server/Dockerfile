@@ -1,13 +1,32 @@
-FROM debian:sid
+FROM alpine
 MAINTAINER Jessica Frazelle <jess@docker.com>
 
-RUN apt-get update && apt-get install -y \
+ENV PATH /go/bin:/usr/local/go/bin:$PATH
+ENV GOPATH /go
+
+RUN	apk update && apk add \
 	ca-certificates \
-	--no-install-recommends \
-	&& rm -rf /var/apt/lists/*
+	&& rm -rf /var/cache/apk/*
 
-ADD https://jesss.s3.amazonaws.com/binaries/weather-server /usr/local/bin/weather-server
+COPY . /go/src/github.com/jfrazelle/weather
 
-RUN chmod +x /usr/local/bin/weather-server
+RUN buildDeps=' \
+		go \
+		git \
+		gcc \
+		libc-dev \
+		libgcc \
+	' \
+	set -x \
+	&& apk update \
+	&& apk add $buildDeps \
+	&& cd /go/src/github.com/jfrazelle/weather \
+	&& go get -d -v github.com/jfrazelle/weather/server \
+	&& go build -o /usr/bin/weather-server ./server \
+	&& apk del $buildDeps \
+	&& rm -rf /var/cache/apk/* \
+	&& rm -rf /go \
+	&& echo "Build complete."
 
-ENTRYPOINT [ "/usr/local/bin/weather-server" ]
+
+ENTRYPOINT [ "weather-server" ]
