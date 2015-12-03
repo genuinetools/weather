@@ -8,8 +8,6 @@ RUN	apk update && apk add \
 	ca-certificates \
 	&& rm -rf /var/cache/apk/*
 
-COPY . /go/src/github.com/jfrazelle/weather
-
 RUN buildDeps=' \
 		go \
 		git \
@@ -20,8 +18,8 @@ RUN buildDeps=' \
 	set -x \
 	&& apk update \
 	&& apk add $buildDeps \
-	&& cd /go/src/github.com/jfrazelle/weather \
 	&& go get -d -v github.com/jfrazelle/weather/server \
+	&& cd /go/src/github.com/jfrazelle/weather \
 	&& go build -o /usr/bin/weather-server ./server \
 	&& apk del $buildDeps \
 	&& rm -rf /var/cache/apk/* \
