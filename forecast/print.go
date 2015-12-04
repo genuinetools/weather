@@ -227,7 +227,8 @@ func PrintDaily(forecast Forecast, days int) error {
 
 	fmt.Println(colorstring.Color("\n[white]" + fmt.Sprintf("%v Day Forecast", days)))
 
-	for index, daily := range forecast.Daily.Data {
+	// Ignore the current day as it's printed before
+	for index, daily := range forecast.Daily.Data[1:] {
 		// only do the amount of days they request
 		if index == days {
 			break
