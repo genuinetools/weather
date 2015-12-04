@@ -56,7 +56,7 @@ func init() {
 	}
 }
 
-//go:generate go run icons/generate/generate.go
+//go:generate go run icons/generate.go
 
 func main() {
 	if vrsn {
