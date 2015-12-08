@@ -136,7 +136,7 @@ type Forecast struct {
 	Hourly    TimeDelimited `json:"hourly"`
 	Latitude  float64       `json:"latitude"`
 	Longitude float64       `json:"longitude"`
-	Offset    int           `json:"offset"`
+	Offset    float64       `json:"offset"`
 	Timezone  string        `json:"timezone"`
 }
 
