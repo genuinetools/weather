@@ -3,8 +3,8 @@
 package icons
 
 const (
-// Clearday is generated from clear-day.txt
-Clearday = `                    ..
+	// Clearday is generated from clear-day.txt
+	Clearday = `                    ..
                    :NNl
                    lNNo
       'oc.         .dd.         .co,
@@ -25,8 +25,8 @@ Clearday = `                    ..
                    lNNo
                    :NNl
                     ..`
-// Clearnight is generated from clear-night.txt
-Clearnight = `        .,.
+	// Clearnight is generated from clear-night.txt
+	Clearnight = `        .,.
      ,dKNNX.
    ,0NNXNNk
   oXNO':NNx
@@ -39,8 +39,8 @@ Clearnight = `        .,.
     oXNNOl;'...':dKNNK:
       ,d0XNNNNNNNXOo'
           .',,,'.`
-// Clear is generated from clear.txt
-Clear = `                    ..
+	// Clear is generated from clear.txt
+	Clear = `                    ..
                    :NNl
                    lNNo
       'oc.         .dd.         .co,
@@ -61,8 +61,8 @@ Clear = `                    ..
                    lNNo
                    :NNl
                     ..`
-// Cloudsnight is generated from clouds-night.txt
-Cloudsnight = `                            .;odc
+	// Cloudsnight is generated from clouds-night.txt
+	Cloudsnight = `                            .;odc
                           ;kXNNNO
                         .0NNO0NN:
                        'XNK; dNNl
@@ -86,8 +86,8 @@ XNN.                                           NNX
                 'lOXNNNNNNNNNNXOo,
                     :x0XNNX0x:.
 `
-// Clouds is generated from clouds.txt
-Clouds = `                   xX:
+	// Clouds is generated from clouds.txt
+	Clouds = `                   xX:
                   .NNK
                   .NN0
      .OOc          ,:.         .d0k
@@ -112,8 +112,8 @@ XNN.                                           NNX
      ,lk0KXXK0xKNN0o;..    ..;o0NNKx0KXXX0ko,
                 'lOXNNNNNNNNNNXOo,
                     :x0XNNX0x:.`
-// Cloudy is generated from cloudy.txt
-Cloudy = `                          .':loolc;.
+	// Cloudy is generated from cloudy.txt
+	Cloudy = `                          .':loolc;.
                        .o0NNNXKKKXNNXk:
                   .,::kXNKo,.     .:kXNXo:;,.
                ;kXNNNNNXc            .xNNNNNNKd.
@@ -133,8 +133,8 @@ XNN.                                          .NNX
      ,ok0XXXX0kKNN0o;'.    ..;o0NNKk0KXXX0ko,
                 'lOXNNNNNNNNNNXOo,
                     :x0XNNX0x:.`
-// Fog is generated from fog.txt
-Fog = `                    .,:cccc:,.
+	// Fog is generated from fog.txt
+	Fog = `                    .,:cccc:,.
                 'lOXNNNNNNNNNNXOo,
               lKNN0o;..    ..;o0XNKl.
        ';ccclXNXo.              .lXNXoccc;'
@@ -153,8 +153,8 @@ xXNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNXO
 
 xXNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNXO
 'cllllllllllllllllllllllllllllllllllllllllllllllc,`
-// Hazenight is generated from haze-night.txt
-Hazenight = `                 ':;
+	// Hazenight is generated from haze-night.txt
+	Hazenight = `                 ':;
               ,xXNNN;
             ;0NNKNNX
            oNN0''NNK
@@ -173,8 +173,8 @@ Hazenight = `                 ':;
 
 .KNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNK.
  ,cccccccccccccccccccccccccccccccccccccc;`
-// Haze is generated from haze.txt
-Haze = `                   ,XX:
+	// Haze is generated from haze.txt
+	Haze = `                   ,XX:
                    lNNo
       .;'          '00;          ';.
       oXN0:                    ;ONNd
@@ -194,8 +194,8 @@ Haze = `                   ,XX:
 
 .KNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNK.
  ,cccccccccccccccccccccccccccccccccccccc;`
-// Mist is generated from mist.txt
-Mist = `                  ,cdOKXXXXKOxl,.
+	// Mist is generated from mist.txt
+	Mist = `                  ,cdOKXXXXKOxl,.
                :OXNNKxolcccox0XNXOc
              lXNXx;.          .;xXNXo
      ,lk0KXXXNXd.                .oXNXXXX0ko,
@@ -216,8 +216,8 @@ dNNo                                          cNNk
                       :XNNXc
                       XNNNNX.
                       ;OXXO:`
-// Partlycloudyday is generated from partly-cloudy-day.txt
-Partlycloudyday = `                   xX:
+	// Partlycloudyday is generated from partly-cloudy-day.txt
+	Partlycloudyday = `                   xX:
                   .NNK
                   .NN0
      .OOc          ,:.         .d0k
@@ -242,8 +242,8 @@ XNN.                                           NNX
      ,lk0KXXK0xKNN0o;..    ..;o0NNKx0KXXX0ko,
                 'lOXNNNNNNNNNNXOo,
                     :x0XNNX0x:.`
-// Partlycloudynight is generated from partly-cloudy-night.txt
-Partlycloudynight = `                            .;odc
+	// Partlycloudynight is generated from partly-cloudy-night.txt
+	Partlycloudynight = `                            .;odc
                           ;kXNNNO
                         .0NNO0NN:
                        'XNK; dNNl
@@ -267,8 +267,8 @@ XNN.                                           NNX
                 'lOXNNNNNNNNNNXOo,
                     :x0XNNX0x:.
 `
-// Rain is generated from rain.txt
-Rain = `                    ;dOKXXKOd;.
+	// Rain is generated from rain.txt
+	Rain = `                    ;dOKXXKOd;.
                 'lOXNNNNNNNNNNXOo,
               lKNN0o;..    ..;o0XNKl.
        ';ccclXNXo.              .lXNXoccc;'
@@ -293,8 +293,8 @@ XNN.                                           NNX
                       xNNNNK.      dKXKd.
                       kNNNNK.
                        oXXk.`
-// Sleet is generated from sleet.txt
-Sleet = `                   .;dOKXXKOd:.
+	// Sleet is generated from sleet.txt
+	Sleet = `                   .;dOKXXKOd:.
                 'lOXNNNNNNNNNNXOo,
              .lKNN0o;'.    ..;o0XNKo.
       .';cccoXNXo.              .lXNXoclc;'.
@@ -319,8 +319,8 @@ XNN.                                          .NNN
                  ,OOo;lKNNKl;lOO:
                        dNNk
                        .KX,`
-// Snow is generated from snow.txt
-Snow = `                   .;dOKXXKOd:.
+	// Snow is generated from snow.txt
+	Snow = `                   .;dOKXXKOd:.
                 'lOXNNNNNNNNNNXOo,
              .lKNN0o;'.    ..;o0XNKo.
       .';cccoXNXo.              .lXNXoclc;'.
@@ -345,8 +345,8 @@ XNN.                                          .NNN
                  ,OOo;lKNNKl;lOO:
                        dNNk
                        .KX,`
-// Thunderstorm is generated from thunderstorm.txt
-Thunderstorm = `                          .:x0XXKOo,
+	// Thunderstorm is generated from thunderstorm.txt
+	Thunderstorm = `                          .:x0XXKOo,
                        .cOXNNNNNNNNNKx,
                   .',;dXNXd;.    .'ckXNKc;,..
                ,xXNNNNNXl            .kNNNNNN0o.
@@ -371,8 +371,8 @@ XNN.                                          .NNX
                     kXk'
                    cx.
                    ;`
-// Tornado is generated from tornado.txt
-Tornado = `                          .:x0XXKOo,
+	// Tornado is generated from tornado.txt
+	Tornado = `                          .:x0XXKOo,
                        .cOXNNNNNNNNNKx,
                   .',;dXNXd;.    .'ckXNKc;,..
                ,xXNNNNNXl            .kNNNNNN0o.
@@ -397,8 +397,8 @@ XNN.                                          .NNX
                     kXk'
                    cx.
                    ;`
-// Wind is generated from wind.txt
-Wind = `                  ,clc,
+	// Wind is generated from wind.txt
+	Wind = `                  ,clc,
                 ;KNNNNNK;
                .XNNNNNNNX.
 .ccccccccccccccoXNNNNNNNO        .;cc:.
