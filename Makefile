@@ -1,5 +1,8 @@
 # Set an output prefix, which is the local directory if not specified
 PREFIX?=$(shell pwd)
+BUILDTAGS=
+
+.PHONY: clean cross all fmt vet lint build test install static
 
 # Populate version variables
 # Add to compile time flags
@@ -16,12 +19,15 @@ GO_LDFLAGS_STATIC=-ldflags "-w $(CTIMEVAR) -extldflags -static"
 GOOSES = darwin freebsd linux windows
 GOARCHS = amd64 386
 
+all: clean build fmt lint test vet install
+
 define buildpretty
 mkdir -p ${PREFIX}/cross/$(1)/$(2);
 GOOS=$(1) GOARCH=$(2) CGO_ENABLED=0 go build -o ${PREFIX}/cross/$(1)/$(2)/weather -a -tags "static_build netgo" -installsuffix netgo ${GO_LDFLAGS_STATIC} .;
 endef
 
 cross: *.go VERSION
+	@echo "+ $@"
 	$(foreach GOARCH,$(GOARCHS),$(foreach GOOS,$(GOOSES),$(call buildpretty,$(GOOS),$(GOARCH))))
 
 define buildrelease
@@ -30,7 +36,38 @@ GOOS=$(1) GOARCH=$(2) CGO_ENABLED=0 go build -o ${PREFIX}/cross/weather-$(1)-$(2
 endef
 
 release: *.go VERSION
+	@echo "+ $@"
 	$(foreach GOARCH,$(GOARCHS),$(foreach GOOS,$(GOOSES),$(call buildrelease,$(GOOS),$(GOARCH))))
 
 clean:
-	rm -rf ${PREFIX}/cross
+	@echo "+ $@"
+	@rm -rf weather
+	@rm -rf ${PREFIX}/cross
+
+build:
+	@echo "+ $@"
+	@go build -tags "$(BUILDTAGS)" .
+
+static:
+	@echo "+ $@"
+	CGO_ENABLED=0 go build -tags "$(BUILDTAGS) static_build" -ldflags "-w -extldflags -static" -o magneto .
+
+fmt:
+	@echo "+ $@"
+	@gofmt -s -l . | grep -v vendor | tee /dev/stderr
+
+lint:
+	@echo "+ $@"
+	@golint ./... | grep -v vendor | tee /dev/stderr
+
+test: fmt lint vet
+	@echo "+ $@"
+	@go test -v -tags "$(BUILDTAGS) cgo" $(shell go list ./... | grep -v vendor)
+
+vet:
+	@echo "+ $@"
+	@go vet $(shell go list ./... | grep -v vendor)
+
+install:
+	@echo "+ $@"
+	@go install .
