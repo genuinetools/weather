@@ -1,15 +1,21 @@
-machine:
-  environment:
-    GO15VENDOREXPERIMENT: 1
-dependencies:
-  post:
-    # install golint
+---
+  language: go
+  sudo: false
+  notifications:
+    email: true
+  go:
+    - 1.5
+    - 1.6
+    - tip
+  env:
+    global:
+      - GO15VENDOREXPERIMENT=1
+  install:
     - go get github.com/golang/lint/golint
-
-test:
-  pre:
+    - go get -t -d -v ./...
+  script:
+    - go build -v
     - go vet $(go list ./... | grep -v vendor)
     - test -z "$(golint ./... | grep -v vendor | tee /dev/stderr)"
     - test -z "$(gofmt -s -l . | grep -v vendor | tee /dev/stderr)"
-  override:
     - go test $(go list ./... | grep -v vendor)
