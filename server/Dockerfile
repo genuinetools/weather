@@ -1,28 +1,23 @@
-FROM alpine
-MAINTAINER Jessica Frazelle <jess@docker.com>
+FROM alpine:latest
+MAINTAINER Jessica Frazelle <jess@linux.com>
 
 ENV PATH /go/bin:/usr/local/go/bin:$PATH
 ENV GOPATH /go
 
-RUN	apk update && apk add \
-	ca-certificates \
-	&& rm -rf /var/cache/apk/*
+RUN	apk add --no-cache \
+	ca-certificates
 
-RUN buildDeps=' \
+RUN set -x \
+	&& apk add --no-cache --virtual .build-deps \
 		go \
 		git \
 		gcc \
 		libc-dev \
 		libgcc \
-	' \
-	set -x \
-	&& apk update \
-	&& apk add $buildDeps \
-	&& go get -d -v github.com/jfrazelle/weather/server \
+	&& go get -v github.com/jfrazelle/weather \
 	&& cd /go/src/github.com/jfrazelle/weather \
 	&& go build -o /usr/bin/weather-server ./server \
-	&& apk del $buildDeps \
-	&& rm -rf /var/cache/apk/* \
+	&& apk del .build-deps \
 	&& rm -rf /go \
 	&& echo "Build complete."
 
