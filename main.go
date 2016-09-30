@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/jfrazelle/weather/forecast"
-	"github.com/jfrazelle/weather/geocode"
-	"github.com/jfrazelle/weather/version"
+	"github.com/jessfraz/weather/forecast"
+	"github.com/jessfraz/weather/geocode"
+	"github.com/jessfraz/weather/version"
 	"github.com/mitchellh/colorstring"
 )
 

@@ -9,8 +9,8 @@ import (
 	"net/url"
 
 	"github.com/Sirupsen/logrus"
-	"github.com/jfrazelle/weather/forecast"
-	"github.com/jfrazelle/weather/geocode"
+	"github.com/jessfraz/weather/forecast"
+	"github.com/jessfraz/weather/geocode"
 )
 
 const (

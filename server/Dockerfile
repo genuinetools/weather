@@ -14,8 +14,8 @@ RUN set -x \
 		gcc \
 		libc-dev \
 		libgcc \
-	&& go get -v github.com/jfrazelle/weather \
-	&& cd /go/src/github.com/jfrazelle/weather \
+	&& go get -v github.com/jessfraz/weather \
+	&& cd /go/src/github.com/jessfraz/weather \
 	&& go build -o /usr/bin/weather-server ./server \
 	&& apk del .build-deps \
 	&& rm -rf /go \

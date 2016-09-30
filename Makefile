@@ -6,7 +6,7 @@ BUILDTAGS=
 
 # Populate version variables
 # Add to compile time flags
-PKG := github.com/jfrazelle/weather
+PKG := github.com/jessfraz/weather
 VERSION := $(shell cat VERSION)
 GITCOMMIT := $(shell git rev-parse --short HEAD)
 GITUNTRACKEDCHANGES := $(shell git status --porcelain --untracked-files=no)

@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jfrazelle/weather/geocode"
-	"github.com/jfrazelle/weather/icons"
+	"github.com/jessfraz/weather/geocode"
+	"github.com/jessfraz/weather/icons"
 	"github.com/mitchellh/colorstring"
 )
 
