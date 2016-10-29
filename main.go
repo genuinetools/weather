@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
 	"github.com/jessfraz/weather/forecast"
 	"github.com/jessfraz/weather/geocode"
 	"github.com/jessfraz/weather/version"
@@ -23,7 +24,7 @@ var (
 	server       string
 	vrsn         bool
 	client       bool
-	geo geocode.Geocode
+	geo          geocode.Geocode
 )
 
 func printError(err error) {
@@ -68,28 +69,20 @@ func main() {
 
 	var err error
 	if location == "" {
-		if client == false {
-			// auto locate them if we are not given a location or ssh data
-			geo, err = geocode.Autolocate()
+		sshConn := os.Getenv("SSH_CONNECTION")
+		if client && len(sshConn) > 0 {
+			// use their ssh connection to locate them
+			ipports := strings.Split(sshConn, " ")
+			geo, err = geocode.IPLocate(ipports[0])
 			if err != nil {
 				printError(err)
 			}
+
 		} else {
-			var ssh_conn string
-			ssh_conn = os.Getenv("SSH_CONNECTION")
-			if len(ssh_conn) > 0 {
-				var ipports []string
-				ipports = strings.Split(ssh_conn, " ")
-				geo, err = geocode.Iplocate(ipports[0])
-				if err != nil {
-					printError(err)
-				}
-			} else {
-				// auto locate them
-				geo, err = geocode.Autolocate()
-				if err != nil {
-					printError(err)
-				}
+			// auto locate them
+			geo, err = geocode.Autolocate()
+			if err != nil {
+				printError(err)
 			}
 		}
 	} else {
