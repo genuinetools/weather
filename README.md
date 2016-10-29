@@ -10,10 +10,10 @@ Weather via the command line. Uses the [forecast.io](http://forecast.io) API so 
 
 #### Binaries
 
-- **darwin** [386](https://github.com/jessfraz/weather/releases/download/0.7.0/weather-darwin-386) / [amd64](https://github.com/jessfraz/weather/releases/download/0.7.0/weather-darwin-amd64)
-- **freebsd** [386](https://github.com/jessfraz/weather/releases/download/0.7.0/weather-freebsd-386) / [amd64](https://github.com/jessfraz/weather/releases/download/0.7.0/weather-freebsd-amd64)
-- **linux** [386](https://github.com/jessfraz/weather/releases/download/0.7.0/weather-linux-386) / [amd64](https://github.com/jessfraz/weather/releases/download/0.7.0/weather-linux-amd64)
-- **windows** [386](https://github.com/jessfraz/weather/releases/download/0.7.0/weather-windows-386) / [amd64](https://github.com/jessfraz/weather/releases/download/0.7.0/weather-windows-amd64)
+- **darwin** [386](https://github.com/jessfraz/weather/releases/download/0.8.0/weather-darwin-386) / [amd64](https://github.com/jessfraz/weather/releases/download/0.8.0/weather-darwin-amd64)
+- **freebsd** [386](https://github.com/jessfraz/weather/releases/download/0.8.0/weather-freebsd-386) / [amd64](https://github.com/jessfraz/weather/releases/download/0.8.0/weather-freebsd-amd64)
+- **linux** [386](https://github.com/jessfraz/weather/releases/download/0.8.0/weather-linux-386) / [amd64](https://github.com/jessfraz/weather/releases/download/0.8.0/weather-linux-amd64)
+- **windows** [386](https://github.com/jessfraz/weather/releases/download/0.8.0/weather-windows-386) / [amd64](https://github.com/jessfraz/weather/releases/download/0.8.0/weather-windows-amd64)
 
 #### Via Go
 
