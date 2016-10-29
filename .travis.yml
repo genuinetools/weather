@@ -32,6 +32,9 @@
       - cross/weather-darwin-amd64
       - cross/weather-freebsd-amd64
       - cross/weather-linux-amd64
+      - cross/weather-linux-arm
+      - cross/weather-linux-arm64
+      - cross/weather-solaris-amd64
       - cross/weather-windows-amd64
     skip_cleanup: true
     on:
