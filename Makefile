@@ -95,7 +95,7 @@ release: *.go VERSION ## Builds the cross-compiled binaries, naming them in such
 .PHONY: tag
 tag: ## Create a new git tag to prepare to build a release
 	git tag -sa $(VERSION) -m "$(VERSION)"
-	@echo "Run `git push origin $(VERSION)` to push your new tag to GitHub and trigger a travis build."
+	@echo "Run git push origin $(VERSION) to push your new tag to GitHub and trigger a travis build."
 
 .PHONY: clean
 clean: ## Cleanup any build binaries or packages
