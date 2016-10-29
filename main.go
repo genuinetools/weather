@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
-
+	"strings"
 	"github.com/jessfraz/weather/forecast"
 	"github.com/jessfraz/weather/geocode"
 	"github.com/jessfraz/weather/version"
@@ -22,7 +22,7 @@ var (
 	ignoreAlerts bool
 	server       string
 	vrsn         bool
-
+	client       bool
 	geo geocode.Geocode
 )
 
@@ -37,6 +37,8 @@ func init() {
 	flag.BoolVar(&vrsn, "v", false, "print version and exit (shorthand)")
 	flag.StringVar(&location, "location", "", "Location to get the weather")
 	flag.StringVar(&location, "l", "", "Location to get the weather (shorthand)")
+	flag.BoolVar(&client, "client", false, "Get location for the ssh client")
+	flag.BoolVar(&client, "c", false, "Get location for the ssh client (shorthand)")
 	flag.StringVar(&units, "units", "auto", "System of units")
 	flag.StringVar(&units, "u", "auto", "System of units (shorthand)")
 	flag.StringVar(&server, "server", defaultServerURI, "Weather API server uri")
@@ -66,10 +68,29 @@ func main() {
 
 	var err error
 	if location == "" {
-		// auto locate them if we are not given a location
-		geo, err = geocode.Autolocate()
-		if err != nil {
-			printError(err)
+		if client == false {
+			// auto locate them if we are not given a location or ssh data
+			geo, err = geocode.Autolocate()
+			if err != nil {
+				printError(err)
+			}
+		} else {
+			var ssh_conn string
+			ssh_conn = os.Getenv("SSH_CONNECTION")
+			if len(ssh_conn) > 0 {
+				var ipports []string
+				ipports = strings.Split(ssh_conn, " ")
+				geo, err = geocode.Iplocate(ipports[0])
+				if err != nil {
+					printError(err)
+				}
+			} else {
+				// auto locate them
+				geo, err = geocode.Autolocate()
+				if err != nil {
+					printError(err)
+				}
+			}
 		}
 	} else {
 		// get geolocation data for the given location
