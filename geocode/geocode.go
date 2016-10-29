@@ -171,6 +171,23 @@ func Autolocate() (geocode Geocode, err error) {
 	return geocode, nil
 }
 
+// Iplocate gets the requesters geocode response based off an IP address.
+func Iplocate(ip string) (geocode Geocode, err error) {
+	// send the request
+	resp, err := http.Get(fmt.Sprintf("%s/%s", geoipURI, ip))
+	if err != nil {
+		return geocode, err
+	}
+	defer resp.Body.Close()
+
+	// decode the body
+	dec := json.NewDecoder(resp.Body)
+	if err := dec.Decode(&geocode); err != nil {
+		return geocode, fmt.Errorf("Decoding autolocate response failed: %v", err)
+	}
+
+	return geocode, nil
+}
 // Locate gets the geocode data of a location that is passed as a string.
 func Locate(location, server string) (geocode Geocode, err error) {
 	// create json data
