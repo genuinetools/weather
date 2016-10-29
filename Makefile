@@ -1,12 +1,18 @@
 # Set an output prefix, which is the local directory if not specified
 PREFIX?=$(shell pwd)
-BUILDTAGS=
 
-.PHONY: clean cross all fmt vet lint build test install static
+# Setup name variables for the package/tool
+NAME := weather
+PKG := github.com/jessfraz/$(NAME)
+
+# Set any default go build tags
+BUILDTAGS :=
+
+# Set the build dir, where built cross-compiled binaries will be output
+BUILDDIR := ${PREFIX}/cross
 
 # Populate version variables
 # Add to compile time flags
-PKG := github.com/jessfraz/weather
 VERSION := $(shell cat VERSION)
 GITCOMMIT := $(shell git rev-parse --short HEAD)
 GITUNTRACKEDCHANGES := $(shell git status --porcelain --untracked-files=no)
@@ -16,57 +22,87 @@ endif
 CTIMEVAR=-X $(PKG)/version.GITCOMMIT=$(GITCOMMIT) -X $(PKG)/version.VERSION=$(VERSION)
 GO_LDFLAGS=-ldflags "-w $(CTIMEVAR)"
 GO_LDFLAGS_STATIC=-ldflags "-w $(CTIMEVAR) -extldflags -static"
-GOOSES = darwin freebsd linux windows
-GOARCHS = amd64 386
 
-all: clean build fmt lint test vet install
+# List the GOOS and GOARCH to build
+GOOSARCHES = darwin/amd64 darwin/386 freebsd/amd64 freebsd/386 linux/arm linux/arm64 linux/amd64 linux/386 solaris/amd64 windows/amd64 windows/386
 
-define buildpretty
-mkdir -p ${PREFIX}/cross/$(1)/$(2);
-GOOS=$(1) GOARCH=$(2) CGO_ENABLED=0 go build -o ${PREFIX}/cross/$(1)/$(2)/weather -a -tags "static_build netgo" -installsuffix netgo ${GO_LDFLAGS_STATIC} .;
-endef
+all: clean build fmt lint test vet install ## Runs a clean, build, fmt, lint, test, vet and install
 
-cross: *.go VERSION
+.PHONY: build
+build: $(NAME) ## Builds a dynamic executable or package
+
+$(NAME): *.go VERSION
 	@echo "+ $@"
-	$(foreach GOARCH,$(GOARCHS),$(foreach GOOS,$(GOOSES),$(call buildpretty,$(GOOS),$(GOARCH))))
+	go build -tags "$(BUILDTAGS)" ${GO_LDFLAGS} -o $(NAME) .
 
-define buildrelease
-GOOS=$(1) GOARCH=$(2) CGO_ENABLED=0 go build -o ${PREFIX}/cross/weather-$(1)-$(2) -a -tags "static_build netgo" -installsuffix netgo ${GO_LDFLAGS_STATIC} .;
-endef
-
-release: *.go VERSION
+.PHONY: static
+static: # Builds a static executable
 	@echo "+ $@"
-	$(foreach GOARCH,$(GOARCHS),$(foreach GOOS,$(GOOSES),$(call buildrelease,$(GOOS),$(GOARCH))))
+	CGO_ENABLED=0 go build \
+				-tags "$(BUILDTAGS) static_build" \
+				${GO_LDFLAGS_STATIC} -o $(NAME) .
 
-clean:
+.PHONY: fmt
+fmt: ## Verifies all files have men `gofmt`ed
 	@echo "+ $@"
-	@rm -rf weather
-	@rm -rf ${PREFIX}/cross
+	@gofmt -s -l . | grep -v '.pb.go:' | grep -v vendor | tee /dev/stderr
 
-build:
+.PHONY: lint
+lint: ## Verifies `golint` passes
 	@echo "+ $@"
-	@go build -tags "$(BUILDTAGS)" .
+	@golint ./... | grep -v '.pb.go:' | grep -v vendor | tee /dev/stderr
 
-static:
-	@echo "+ $@"
-	CGO_ENABLED=0 go build -tags "$(BUILDTAGS) static_build" -ldflags "-w -extldflags -static" -o magneto .
-
-fmt:
-	@echo "+ $@"
-	@gofmt -s -l . | grep -v vendor | tee /dev/stderr
-
-lint:
-	@echo "+ $@"
-	@golint ./... | grep -v vendor | tee /dev/stderr
-
-test: fmt lint vet
+.PHONY: test
+test: ## Runs the go tests
 	@echo "+ $@"
 	@go test -v -tags "$(BUILDTAGS) cgo" $(shell go list ./... | grep -v vendor)
 
-vet:
+.PHONY: vet
+vet: ## Verifies `go vet` passes
 	@echo "+ $@"
-	@go vet $(shell go list ./... | grep -v vendor)
+	@go vet $(shell go list ./... | grep -v vendor) | grep -v '.pb.go:' | tee /dev/stderr
 
-install:
+.PHONY: install
+install: ## Installs the executable or package
 	@echo "+ $@"
 	@go install .
+
+define buildpretty
+mkdir -p $(BUILDDIR)/$(1)/$(2);
+GOOS=$(1) GOARCH=$(2) CGO_ENABLED=0 go build \
+	 -o $(BUILDDIR)/$(1)/$(2)/$(NAME) \
+	 -a -tags "$(BUILDTAGS) static_build netgo" \
+	 -installsuffix netgo ${GO_LDFLAGS_STATIC} .;
+endef
+
+.PHONY: cross
+cross: *.go VERSION ## Builds the cross-compiled binaries, creating a clean directory structure (eg. GOOS/GOARCH/binary)
+	@echo "+ $@"
+	$(foreach GOOSARCH,$(GOOSARCHES), $(call buildpretty,$(subst /,,$(dir $(GOOSARCH))),$(notdir $(GOOSARCH))))
+
+define buildrelease
+GOOS=$(1) GOARCH=$(2) CGO_ENABLED=0 go build \
+	 -o $(BUILDDIR)/$(NAME)-$(1)-$(2) \
+	 -a -tags "$(BUILDTAGS) static_build netgo" \
+	 -installsuffix netgo ${GO_LDFLAGS_STATIC} .;
+endef
+
+.PHONY: release
+release: *.go VERSION ## Builds the cross-compiled binaries, naming them in such a way for release (eg. binary-GOOS-GOARCH)
+	@echo "+ $@"
+	$(foreach GOOSARCH,$(GOOSARCHES), $(call buildrelease,$(subst /,,$(dir $(GOOSARCH))),$(notdir $(GOOSARCH))))
+
+.PHONY: tag
+tag: ## Create a new git tag to prepare to build a release
+	git tag -a $(VERSION) -m "$(VERSION)"
+	@echo "Run `git push origin $(VERSION)` to push your new tag to GitHub and trigger a travis build."
+
+.PHONY: clean
+clean: ## Cleanup any build binaries or packages
+	@echo "+ $@"
+	$(RM) $(NAME)
+	$(RM) -r $(BUILDDIR)
+
+.PHONY: help
+help:
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

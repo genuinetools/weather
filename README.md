@@ -12,7 +12,8 @@ Weather via the command line. Uses the [forecast.io](http://forecast.io) API so 
 
 - **darwin** [386](https://github.com/jessfraz/weather/releases/download/0.8.0/weather-darwin-386) / [amd64](https://github.com/jessfraz/weather/releases/download/0.8.0/weather-darwin-amd64)
 - **freebsd** [386](https://github.com/jessfraz/weather/releases/download/0.8.0/weather-freebsd-386) / [amd64](https://github.com/jessfraz/weather/releases/download/0.8.0/weather-freebsd-amd64)
-- **linux** [386](https://github.com/jessfraz/weather/releases/download/0.8.0/weather-linux-386) / [amd64](https://github.com/jessfraz/weather/releases/download/0.8.0/weather-linux-amd64)
+- **linux** [386](https://github.com/jessfraz/weather/releases/download/0.8.0/weather-linux-386) / [amd64](https://github.com/jessfraz/weather/releases/download/0.8.0/weather-linux-amd64) / [arm](https://github.com/jessfraz/weather/releases/download/0.8.0/weather-linux-arm) / [arm64](https://github.com/jessfraz/weather/releases/download/0.8.0/weather-linux-arm64)
+- **solaris** [amd64](https://github.com/jessfraz/weather/releases/download/0.8.0/weather-solaris-amd64)
 - **windows** [386](https://github.com/jessfraz/weather/releases/download/0.8.0/weather-windows-386) / [amd64](https://github.com/jessfraz/weather/releases/download/0.8.0/weather-windows-amd64)
 
 #### Via Go
@@ -118,6 +119,23 @@ $ weather -l "Manhattan Beach, CA"
 # The cloud coverage is 35%
 # The visibility is 9.58 miles
 # The pressure is 1012.99 mbar
+```
+
+## Makefile Usage
+
+```console
+$ make help
+all                            Runs a clean, build, fmt, lint, test, vet and install
+build                          Builds a dynamic executable or package
+clean                          Cleanup any build binaries or packages
+cross                          Builds the cross compiled binaries, creating a clean directory structure (eg. GOOS/GOARCH/binary)
+fmt                            Verifies all files have men `gofmt`ed
+install                        Installs the executable or package
+lint                           Verifies `golint` passes
+release                        Builds the cross compiled binaries, naming them in such a way for release (eg. binary-GOOS-GOARCH)
+tag                            Create a new git tag to prepare to build a release
+test                           Runs the go tests
+vet                            Verifies `go vet` passes
 ```
 
 [![Analytics](https://ga-beacon.appspot.com/UA-29404280-16/weather/README.md)](https://github.com/jessfraz/weather)
