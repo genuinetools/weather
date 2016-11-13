@@ -21,6 +21,7 @@ var (
 	units        string
 	days         int
 	ignoreAlerts bool
+	showIcon     bool
 	server       string
 	vrsn         bool
 	client       bool
@@ -47,6 +48,7 @@ func init() {
 	flag.IntVar(&days, "days", 0, "No. of days to get forecast")
 	flag.IntVar(&days, "d", 0, "No. of days to get forecast (shorthand)")
 	flag.BoolVar(&ignoreAlerts, "ignore-alerts", false, "Ignore alerts in weather output")
+	flag.BoolVar(&showIcon, "show-icon", true, "Show an icon representing the weather")
 
 	flag.Usage = func() {
 		flag.PrintDefaults()
@@ -105,7 +107,7 @@ func main() {
 		printError(err)
 	}
 
-	if err := forecast.PrintCurrent(fc, geo, ignoreAlerts); err != nil {
+	if err := forecast.PrintCurrent(fc, geo, ignoreAlerts, showIcon); err != nil {
 		printError(err)
 	}
 
