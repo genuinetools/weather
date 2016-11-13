@@ -109,7 +109,7 @@ func main() {
 		printError(err)
 	}
 
-	if days > 1 {
+	if days > 0 {
 		forecast.PrintDaily(fc, days)
 	}
 }
