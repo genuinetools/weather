@@ -36,7 +36,7 @@ $(NAME): *.go VERSION
 	go build -tags "$(BUILDTAGS)" ${GO_LDFLAGS} -o $(NAME) .
 
 .PHONY: static
-static: # Builds a static executable
+static: ## Builds a static executable
 	@echo "+ $@"
 	CGO_ENABLED=0 go build \
 				-tags "$(BUILDTAGS) static_build" \
