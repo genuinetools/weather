@@ -2,7 +2,7 @@
 
 [![Travis CI](https://travis-ci.org/jessfraz/weather.svg?branch=master)](https://travis-ci.org/jessfraz/weather)
 
-Weather via the command line. Uses the [forecast.io](http://forecast.io) API so it's super accurate. Also includes any current weather alerts in the output.
+Weather via the command line. Uses the [darksky.net](https://darksky.net) API so it's super accurate. Also includes any current weather alerts in the output.
 
 ![Screenshot](screenshot.png)
 
@@ -26,7 +26,7 @@ $ go get github.com/jessfraz/weather
 
 - **`--location, -l`:** Your address, can be in the format of just a zipcode or a city, state, or the full address. **defaults to auto locating you based off your ip**
 - **`--units, -u`:** The unit system to use. **defaults to `auto`**, other options are `us`, `si`, `uk`, `uk2`, `ca`
-    for more information on units see [the forecast.io api](https://developer.forecast.io/docs/v2#options)
+    for more information on units see [the darksky.net api](https://darksky.net/dev/docs/forecast)
 - **`--days, -d`:** Days of weather to retrieve. **defaults to the current weather, ie. 0 or 1**
 - **`--ignore-alerts`:** Don't print alerts in weather output. **defaults false**
 - **`--server, -s`:** Weather API server uri **defaults to  "https://geocode.jessfraz.com"**

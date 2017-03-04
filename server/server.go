@@ -14,13 +14,13 @@ import (
 )
 
 const (
-	forecastAPIURI = "https://api.forecast.io/forecast"
-	geocodeAPIURI  = "https://maps.googleapis.com/maps/api/geocode/json"
+	darkskyAPIURI = "https://api.darksky.net/forecast"
+	geocodeAPIURI = "https://maps.googleapis.com/maps/api/geocode/json"
 )
 
 var (
-	forecastAPIKey string
-	geocodeAPIKey  string
+	darkskyAPIKey string
+	geocodeAPIKey string
 
 	port     string
 	certFile string
@@ -45,7 +45,7 @@ func (j JSONResponse) String() string {
 }
 
 // forecastHandler takes a forecast.Request object
-// and passes it to the forecast.io API
+// and passes it to the darksky API
 func forecastHandler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var f forecast.Request
@@ -62,8 +62,8 @@ func forecastHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	data := url.Values{"units": {f.Units}, "exclude": {string(exclude)}}
 
-	// request the forecast.io API
-	url := fmt.Sprintf("%s/%s/%g,%g?%s", forecastAPIURI, forecastAPIKey, f.Latitude, f.Longitude, data.Encode())
+	// request the darksky.net API
+	url := fmt.Sprintf("%s/%s/%g,%g?%s", darkskyAPIURI, darkskyAPIKey, f.Latitude, f.Longitude, data.Encode())
 	resp, err := http.Get(url)
 	if err != nil {
 		writeError(w, fmt.Sprintf("request to %s failed: %v", url, err))
@@ -196,7 +196,7 @@ func writeError(w http.ResponseWriter, msg string) {
 }
 
 func init() {
-	flag.StringVar(&forecastAPIKey, "forecast-apikey", "", "Key for forecast.io API")
+	flag.StringVar(&darkskyAPIKey, "darksky-apikey", "", "Key for darksky.net API")
 	flag.StringVar(&geocodeAPIKey, "geocode-apikey", "", "Key for Google Maps Geocode API")
 
 	flag.StringVar(&port, "p", "1234", "port for server to run on")
@@ -205,8 +205,8 @@ func init() {
 
 	flag.Parse()
 
-	if forecastAPIKey == "" {
-		logrus.Fatalf("You need to pass a forecast.io API Key")
+	if darkskyAPIKey == "" {
+		logrus.Fatalf("You need to pass a darksky.net API Key")
 	}
 
 	if geocodeAPIKey == "" {

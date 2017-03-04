@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-// response from https://api.forecast.io/forecast/
+// response from https://api.darksky.net/forecast/
 // comes back like:
 // {
 //     "alerts": [
