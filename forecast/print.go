@@ -184,15 +184,17 @@ func printCommon(weather Weather, unitsFormat UnitMeasures) error {
 }
 
 // PrintCurrent pretty prints the current forecast data.
-func PrintCurrent(forecast Forecast, geolocation geocode.Geocode, ignoreAlerts bool) error {
+func PrintCurrent(forecast Forecast, geolocation geocode.Geocode, ignoreAlerts bool, showIcon bool) error {
 	unitsFormat := UnitFormats[forecast.Flags.Units]
 
-	icon, err := getIcon(forecast.Currently.Icon)
-	if err != nil {
-		return err
-	}
+	if showIcon {
+		icon, err := getIcon(forecast.Currently.Icon)
+		if err != nil {
+			return err
+		}
 
-	fmt.Println(icon)
+		fmt.Println(icon)
+	}
 
 	location := colorstring.Color(fmt.Sprintf("[green]%s in %s", geolocation.City, geolocation.Region))
 	fmt.Printf("\nCurrent weather is %s in %s for %s\n", colorstring.Color("[cyan]"+forecast.Currently.Summary), location, colorstring.Color("[cyan]"+epochFormat(forecast.Currently.Time)))
