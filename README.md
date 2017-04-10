@@ -29,7 +29,7 @@ $ go get github.com/jessfraz/weather
     for more information on units see [the darksky.net api](https://darksky.net/dev/docs/forecast)
 - **`--days, -d`:** Days of weather to retrieve. **defaults to the current weather, ie. 0 or 1**
 - **`--ignore-alerts`:** Don't print alerts in weather output. **defaults false**
-- **`--show-icon`:** Show an icon representing the weather. **defaults true**
+- **`--hide-icon`:** Hide the weather icons from being output. **defaults false**
 - **`--server, -s`:** Weather API server uri **defaults to  "https://geocode.jessfraz.com"**
 
 

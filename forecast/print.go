@@ -184,10 +184,10 @@ func printCommon(weather Weather, unitsFormat UnitMeasures) error {
 }
 
 // PrintCurrent pretty prints the current forecast data.
-func PrintCurrent(forecast Forecast, geolocation geocode.Geocode, ignoreAlerts bool, showIcon bool) error {
+func PrintCurrent(forecast Forecast, geolocation geocode.Geocode, ignoreAlerts bool, hideIcon bool) error {
 	unitsFormat := UnitFormats[forecast.Flags.Units]
 
-	if showIcon {
+	if !hideIcon {
 		icon, err := getIcon(forecast.Currently.Icon)
 		if err != nil {
 			return err
