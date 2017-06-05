@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"os"
@@ -86,6 +87,10 @@ func main() {
 			if err != nil {
 				printError(err)
 			}
+
+			if geo.Latitude == 0 || geo.Longitude == 0 {
+				printError(errors.New("Latitude and Longitude could not be determined from your IP so the weather will not be accurate\nTry: weather -l <your_zipcode> OR weather -l \"your city, state\""))
+			}
 		}
 	} else {
 		// get geolocation data for the given location
@@ -93,6 +98,10 @@ func main() {
 		if err != nil {
 			printError(err)
 		}
+	}
+
+	if geo.Latitude == 0 || geo.Longitude == 0 {
+		printError(errors.New("Latitude and Longitude could not be determined so the weather will not be accurate"))
 	}
 
 	data := forecast.Request{
