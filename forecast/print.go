@@ -177,7 +177,7 @@ func printCommon(weather Weather, unitsFormat UnitMeasures) error {
 
 	if weather.Pressure > 0 {
 		pressure := colorstring.Color(fmt.Sprintf("[white]%v %s", weather.Pressure, "mbar"))
-		fmt.Printf("  The pressure is %s\n", pressure)
+		fmt.Printf("  The pressure is %s\n\n", pressure)
 	}
 
 	return nil
@@ -227,8 +227,6 @@ func PrintCurrent(forecast Forecast, geolocation geocode.Geocode, ignoreAlerts b
 func PrintDaily(forecast Forecast, days int) error {
 	unitsFormat := UnitFormats[forecast.Flags.Units]
 
-	fmt.Println(colorstring.Color("\n[white]" + fmt.Sprintf("%v Day Forecast", days)))
-
 	// Ignore the current day as it's printed before
 	for index, daily := range forecast.Daily.Data[1:] {
 		// only do the amount of days they request
@@ -236,7 +234,7 @@ func PrintDaily(forecast Forecast, days int) error {
 			break
 		}
 
-		fmt.Println(colorstring.Color("\n[magenta]" + epochFormatDate(daily.Time)))
+		fmt.Println(colorstring.Color("[magenta]" + epochFormatDate(daily.Time)))
 
 		tempMax := colorstring.Color(fmt.Sprintf("[blue]%v%s", daily.TemperatureMax, unitsFormat.Degrees))
 		tempMin := colorstring.Color(fmt.Sprintf("[blue]%v%s", daily.TemperatureMin, unitsFormat.Degrees))
