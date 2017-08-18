@@ -139,45 +139,45 @@ func printCommon(weather Weather, unitsFormat UnitMeasures) error {
 	if weather.Humidity > 0 {
 		humidity := colorstring.Color(fmt.Sprintf("[white]%v%s", weather.Humidity*100, "%"))
 		if weather.Humidity > 0.20 {
-			fmt.Printf("Ick! The humidity is %s\n", humidity)
+			fmt.Printf("  Ick! The humidity is %s\n", humidity)
 		} else {
-			fmt.Printf("The humidity is %s\n", humidity)
+			fmt.Printf("  The humidity is %s\n", humidity)
 		}
 	}
 
 	if weather.PrecipIntensity > 0 {
 		precInt := colorstring.Color(fmt.Sprintf("[white]%v %s", weather.PrecipIntensity, unitsFormat.Precipitation))
-		fmt.Printf("The precipitation intensity of %s is %s\n", colorstring.Color("[white]"+weather.PrecipType), precInt)
+		fmt.Printf("  The precipitation intensity of %s is %s\n", colorstring.Color("[white]"+weather.PrecipType), precInt)
 	}
 
 	if weather.PrecipProbability > 0 {
 		prec := colorstring.Color(fmt.Sprintf("[white]%v%s", weather.PrecipProbability*100, "%"))
-		fmt.Printf("The precipitation probability is %s\n", prec)
+		fmt.Printf("  The precipitation probability is %s\n", prec)
 	}
 
 	if weather.NearestStormDistance > 0 {
 		dist := colorstring.Color(fmt.Sprintf("[white]%v %s %v", weather.NearestStormDistance, unitsFormat.Length, getBearingDetails(weather.NearestStormBearing)))
-		fmt.Printf("The nearest storm is %s away\n", dist)
+		fmt.Printf("  The nearest storm is %s away\n", dist)
 	}
 
 	if weather.WindSpeed > 0 {
 		wind := colorstring.Color(fmt.Sprintf("[white]%v %s %v", weather.WindSpeed, unitsFormat.Speed, getBearingDetails(weather.WindBearing)))
-		fmt.Printf("The wind speed is %s\n", wind)
+		fmt.Printf("  The wind speed is %s\n", wind)
 	}
 
 	if weather.CloudCover > 0 {
 		cloudCover := colorstring.Color(fmt.Sprintf("[white]%v%s", weather.CloudCover*100, "%"))
-		fmt.Printf("The cloud coverage is %s\n", cloudCover)
+		fmt.Printf("  The cloud coverage is %s\n", cloudCover)
 	}
 
 	if weather.Visibility < 10 {
 		visibility := colorstring.Color(fmt.Sprintf("[white]%v %s", weather.Visibility, unitsFormat.Length))
-		fmt.Printf("The visibility is %s\n", visibility)
+		fmt.Printf("  The visibility is %s\n", visibility)
 	}
 
 	if weather.Pressure > 0 {
 		pressure := colorstring.Color(fmt.Sprintf("[white]%v %s", weather.Pressure, "mbar"))
-		fmt.Printf("The pressure is %s\n", pressure)
+		fmt.Printf("  The pressure is %s\n\n", pressure)
 	}
 
 	return nil
@@ -227,8 +227,6 @@ func PrintCurrent(forecast Forecast, geolocation geocode.Geocode, ignoreAlerts b
 func PrintDaily(forecast Forecast, days int) error {
 	unitsFormat := UnitFormats[forecast.Flags.Units]
 
-	fmt.Println(colorstring.Color("\n[white]" + fmt.Sprintf("%v Day Forecast", days)))
-
 	// Ignore the current day as it's printed before
 	for index, daily := range forecast.Daily.Data[1:] {
 		// only do the amount of days they request
@@ -236,13 +234,14 @@ func PrintDaily(forecast Forecast, days int) error {
 			break
 		}
 
-		fmt.Println(colorstring.Color("\n[magenta]" + epochFormatDate(daily.Time)))
+		fmt.Println(colorstring.Color("[magenta]" + epochFormatDate(daily.Time)))
 
 		tempMax := colorstring.Color(fmt.Sprintf("[blue]%v%s", daily.TemperatureMax, unitsFormat.Degrees))
 		tempMin := colorstring.Color(fmt.Sprintf("[blue]%v%s", daily.TemperatureMin, unitsFormat.Degrees))
 		feelsLikeMax := colorstring.Color(fmt.Sprintf("[cyan]%v%s", daily.ApparentTemperatureMax, unitsFormat.Degrees))
 		feelsLikeMin := colorstring.Color(fmt.Sprintf("[cyan]%v%s", daily.ApparentTemperatureMin, unitsFormat.Degrees))
-		fmt.Printf("The temperature high is %s, feels like %s around %s, and low is %s, feels like %s around %s\n\n", tempMax, feelsLikeMax, epochFormatTime(daily.TemperatureMaxTime), tempMin, feelsLikeMin, epochFormatTime(daily.TemperatureMinTime))
+		fmt.Printf("The temperature high is %s, feels like %s around %s,\n", tempMax, feelsLikeMax, epochFormatTime(daily.TemperatureMaxTime))
+		fmt.Printf("and low is %s, feels like %s around %s\n\n", tempMin, feelsLikeMin, epochFormatTime(daily.TemperatureMinTime))
 
 		printCommon(daily, unitsFormat)
 	}
