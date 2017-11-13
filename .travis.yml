@@ -7,6 +7,7 @@
     - 1.6.x
     - 1.7.x
     - 1.8.x
+    - 1.9.x
     - tip
   env:
     global:
@@ -24,7 +25,6 @@
     provider: releases
     api_key:
       secure: "C78vOwW6YqKqSRYr+z2Rus2UsWaq57ntFKuORFo8UKw4eK5Nfbr4ysx5n47j0nyGE6SFGEGzlSQZtoHHQFzv6KTkK8PIkrewYLK8ESeEr09EjTgUjeU0olDHioMiI5z3xrb1rbLEVfOY/axyqRovKgqlTIRf8eRm0jdlNaFJ9v8bgxNMylKG24sezNhO+ORon66lYXrsZ10bd9mPyC4zYr5pV1OQjbxV1VB0ym3abRVSvlOtTUkG98ILLuO6FpHPbVYJcnnrDoTWvt2JxPkIECM2WShOlsiQdncO33CbOca6z6B6VYUAzPo1uzzsGn71MqeQV/wnqIZNj31F1wdSu72LxdjUfJSrKFnKckJGdxiS56OhFmC6v5YZeylruucUGM5dwpoKtH6SiR9QpoGWEkhrhTHyGa2QAoQovk1XRw0WQ7GrzpYK1LPOstuL37dPQLhENZ0O9yd0Tsm3YBzFSDP9J5lCyRuZv4ENDutxWs/oiGTNRp47PHYdANH7USG83UOpwSImZGQWBzWdSwfsWeGV4E0T0LLNSwVi5HeBSdTa+YAd62/PHaB5u+hDmcKEUodjWwMwUylO1m4wjqCinegC/RGkSLH2h3j8kUlWOSnyTrKhczyEaISixQsYBf1qwIj9nRf3XMHzXyxuBlqmNeHb9OZjD8lw8mLEmtlbBeI="
-    go: 1.8.x
     file:
       - cross/weather-linux-amd64.md5
       - cross/weather-windows-386.sha256
@@ -61,4 +61,5 @@
       - cross/weather-linux-amd64
     skip_cleanup: true
     on:
+      go: 1.9.x
       tags: true
