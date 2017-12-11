@@ -10,11 +10,11 @@ Weather via the command line. Uses the [darksky.net](https://darksky.net) API so
 
 #### Binaries
 
-- **darwin** [386](https://github.com/jessfraz/weather/releases/download/v0.9.9/weather-darwin-386) / [amd64](https://github.com/jessfraz/weather/releases/download/v0.9.9/weather-darwin-amd64)
-- **freebsd** [386](https://github.com/jessfraz/weather/releases/download/v0.9.9/weather-freebsd-386) / [amd64](https://github.com/jessfraz/weather/releases/download/v0.9.9/weather-freebsd-amd64)
-- **linux** [386](https://github.com/jessfraz/weather/releases/download/v0.9.9/weather-linux-386) / [amd64](https://github.com/jessfraz/weather/releases/download/v0.9.9/weather-linux-amd64) / [arm](https://github.com/jessfraz/weather/releases/download/v0.9.9/weather-linux-arm) / [arm64](https://github.com/jessfraz/weather/releases/download/v0.9.9/weather-linux-arm64)
-- **solaris** [amd64](https://github.com/jessfraz/weather/releases/download/v0.9.9/weather-solaris-amd64)
-- **windows** [386](https://github.com/jessfraz/weather/releases/download/v0.9.9/weather-windows-386) / [amd64](https://github.com/jessfraz/weather/releases/download/v0.9.9/weather-windows-amd64)
+- **darwin** [386](https://github.com/jessfraz/weather/releases/download/v0.10.0/weather-darwin-386) / [amd64](https://github.com/jessfraz/weather/releases/download/v0.10.0/weather-darwin-amd64)
+- **freebsd** [386](https://github.com/jessfraz/weather/releases/download/v0.10.0/weather-freebsd-386) / [amd64](https://github.com/jessfraz/weather/releases/download/v0.10.0/weather-freebsd-amd64)
+- **linux** [386](https://github.com/jessfraz/weather/releases/download/v0.10.0/weather-linux-386) / [amd64](https://github.com/jessfraz/weather/releases/download/v0.10.0/weather-linux-amd64) / [arm](https://github.com/jessfraz/weather/releases/download/v0.10.0/weather-linux-arm) / [arm64](https://github.com/jessfraz/weather/releases/download/v0.10.0/weather-linux-arm64)
+- **solaris** [amd64](https://github.com/jessfraz/weather/releases/download/v0.10.0/weather-solaris-amd64)
+- **windows** [386](https://github.com/jessfraz/weather/releases/download/v0.10.0/weather-windows-386) / [amd64](https://github.com/jessfraz/weather/releases/download/v0.10.0/weather-windows-amd64)
 
 #### Via Go
 
