@@ -43,6 +43,5 @@ Icon
 .Trashes
 
 weather
-binaries
-cross
+cross/
 server/weather-server
