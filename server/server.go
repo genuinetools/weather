@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/jessfraz/weather/forecast"
 	"github.com/jessfraz/weather/geocode"
+	"github.com/sirupsen/logrus"
 )
 
 const (
