@@ -22,6 +22,12 @@ Weather via the command line. Uses the [darksky.net](https://darksky.net) API so
 $ go get github.com/jessfraz/weather
 ```
 
+#### Via Homebrew
+
+```bash
+$ brew install darksky-weather
+```
+
 ## Usage
 
 - **`--location, -l`:** Your address, can be in the format of just a zipcode or a city, state, or the full address. **defaults to auto locating you based off your ip**
