@@ -1,6 +1,7 @@
 package forecast
 
 import (
+	"bytes"
 	"fmt"
 	"math"
 	"strings"
@@ -73,6 +74,16 @@ func epochFormatDate(seconds int64) string {
 func epochFormatTime(seconds int64) string {
 	epochTime := time.Unix(0, seconds*int64(time.Second))
 	return epochTime.Format("3:04pm MST")
+}
+
+func epochFormatHour(seconds int64) string {
+	epochTime := time.Unix(0, seconds*int64(time.Second))
+	s := epochTime.Format("3pm")
+	s = s[:len(s)-1]
+	if len(s) == 2 {
+		s += " "
+	}
+	return s
 }
 
 func getIcon(iconStr string) (icon string, err error) {
@@ -220,7 +231,38 @@ func PrintCurrent(forecast Forecast, geolocation geocode.Geocode, ignoreAlerts b
 		}
 	}
 
-	return printCommon(forecast.Currently, unitsFormat)
+	if err := printCommon(forecast.Currently, unitsFormat); err != nil {
+		return err
+	}
+
+	if forecast.Hourly.Summary != "" {
+		fmt.Printf("%s\n\n", forecast.Hourly.Summary)
+
+		var ticks = []rune(" ▁▂▃▄▅▆▇█")
+		rainForecast, showRain := &bytes.Buffer{}, false
+		for i := 0; i < 16; i++ {
+			p := forecast.Hourly.Data[i].PrecipProbability
+			t := int(p*float64(len(ticks)-2)) + 1
+			if p == 0 {
+				t = 0
+			} else {
+				showRain = true
+			}
+			rainForecast.WriteRune(ticks[t])
+			rainForecast.WriteRune(ticks[t])
+			rainForecast.WriteRune(' ')
+		}
+		if showRain {
+			fmt.Printf("Rain chance: %s\n", rainForecast)
+			fmt.Printf("             ")
+			for i := 0; i < 4; i++ {
+				fmt.Printf("%s         ", epochFormatHour(forecast.Hourly.Data[i*4].Time))
+			}
+			fmt.Printf("\n\n")
+		}
+	}
+
+	return nil
 }
 
 // PrintDaily pretty prints the daily forecast data.

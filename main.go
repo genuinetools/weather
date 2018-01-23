@@ -23,6 +23,7 @@ var (
 	days         int
 	ignoreAlerts bool
 	hideIcon     bool
+	noForecast   bool
 	server       string
 	vrsn         bool
 	client       bool
@@ -50,6 +51,7 @@ func init() {
 	flag.IntVar(&days, "d", 0, "No. of days to get forecast (shorthand)")
 	flag.BoolVar(&ignoreAlerts, "ignore-alerts", false, "Ignore alerts in weather output")
 	flag.BoolVar(&hideIcon, "hide-icon", false, "Hide the weather icons from being output")
+	flag.BoolVar(&noForecast, "no-forecast", false, "Hide the forecast for the next 16 hourse")
 
 	flag.Usage = func() {
 		flag.PrintDefaults()
@@ -108,7 +110,10 @@ func main() {
 		Latitude:  geo.Latitude,
 		Longitude: geo.Longitude,
 		Units:     units,
-		Exclude:   []string{"hourly", "minutely"},
+		Exclude:   []string{"minutely"},
+	}
+	if noForecast {
+		data.Exclude = append(data.Exclude, "hourly")
 	}
 
 	fc, err := forecast.Get(fmt.Sprintf("%s/forecast", server), data)
