@@ -148,7 +148,7 @@ func getBearingDetails(degrees float64) string {
 
 func printCommon(weather Weather, unitsFormat UnitMeasures) error {
 	if weather.Humidity > 0 {
-		humidity := colorstring.Color(fmt.Sprintf("[white]%v%s", weather.Humidity*100, "%"))
+		humidity := colorstring.Color(fmt.Sprintf("[white]%.2f%s", weather.Humidity*100, "%"))
 		if weather.Humidity > 0.20 {
 			fmt.Printf("  Ick! The humidity is %s\n", humidity)
 		} else {
@@ -177,7 +177,7 @@ func printCommon(weather Weather, unitsFormat UnitMeasures) error {
 	}
 
 	if weather.CloudCover > 0 {
-		cloudCover := colorstring.Color(fmt.Sprintf("[white]%v%s", weather.CloudCover*100, "%"))
+		cloudCover := colorstring.Color(fmt.Sprintf("[white]%.2f%s", weather.CloudCover*100, "%"))
 		fmt.Printf("  The cloud coverage is %s\n", cloudCover)
 	}
 
