@@ -148,7 +148,9 @@ func getBearingDetails(degrees float64) string {
 
 func printCommon(weather Weather, unitsFormat UnitMeasures) error {
 	if weather.Humidity > 0 {
+
 		humidity := colorstring.Color(fmt.Sprintf("[white]%.2f%s", weather.Humidity*100, "%"))
+
 		if weather.Humidity > 0.20 {
 			fmt.Printf("  Ick! The humidity is %s\n", humidity)
 		} else {
@@ -157,37 +159,39 @@ func printCommon(weather Weather, unitsFormat UnitMeasures) error {
 	}
 
 	if weather.PrecipIntensity > 0 {
-		precInt := colorstring.Color(fmt.Sprintf("[white]%v %s", weather.PrecipIntensity, unitsFormat.Precipitation))
+		precInt := colorstring.Color(fmt.Sprintf("[white]%.1f %s", weather.PrecipIntensity, unitsFormat.Precipitation))
 		fmt.Printf("  The precipitation intensity of %s is %s\n", colorstring.Color("[white]"+weather.PrecipType), precInt)
 	}
 
 	if weather.PrecipProbability > 0 {
-		prec := colorstring.Color(fmt.Sprintf("[white]%v%s", weather.PrecipProbability*100, "%"))
+		prec := colorstring.Color(fmt.Sprintf("[white]%.0f%s", weather.PrecipProbability*100, "%"))
 		fmt.Printf("  The precipitation probability is %s\n", prec)
 	}
 
 	if weather.NearestStormDistance > 0 {
-		dist := colorstring.Color(fmt.Sprintf("[white]%v %s %v", weather.NearestStormDistance, unitsFormat.Length, getBearingDetails(weather.NearestStormBearing)))
+		dist := colorstring.Color(fmt.Sprintf("[white]%.1f %s %v", weather.NearestStormDistance, unitsFormat.Length, getBearingDetails(weather.NearestStormBearing)))
 		fmt.Printf("  The nearest storm is %s away\n", dist)
 	}
 
 	if weather.WindSpeed > 0 {
-		wind := colorstring.Color(fmt.Sprintf("[white]%v %s %v", weather.WindSpeed, unitsFormat.Speed, getBearingDetails(weather.WindBearing)))
+		wind := colorstring.Color(fmt.Sprintf("[white]%.2f %s %v", weather.WindSpeed, unitsFormat.Speed, getBearingDetails(weather.WindBearing)))
 		fmt.Printf("  The wind speed is %s\n", wind)
 	}
 
 	if weather.CloudCover > 0 {
+
 		cloudCover := colorstring.Color(fmt.Sprintf("[white]%.2f%s", weather.CloudCover*100, "%"))
+
 		fmt.Printf("  The cloud coverage is %s\n", cloudCover)
 	}
 
 	if weather.Visibility < 10 {
-		visibility := colorstring.Color(fmt.Sprintf("[white]%v %s", weather.Visibility, unitsFormat.Length))
+		visibility := colorstring.Color(fmt.Sprintf("[white]%.1f %s", weather.Visibility, unitsFormat.Length))
 		fmt.Printf("  The visibility is %s\n", visibility)
 	}
 
 	if weather.Pressure > 0 {
-		pressure := colorstring.Color(fmt.Sprintf("[white]%v %s", weather.Pressure, "mbar"))
+		pressure := colorstring.Color(fmt.Sprintf("[white]%.1f %s", weather.Pressure, "mbar"))
 		fmt.Printf("  The pressure is %s\n\n", pressure)
 	}
 
