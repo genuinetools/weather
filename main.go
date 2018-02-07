@@ -51,7 +51,7 @@ func init() {
 	flag.IntVar(&days, "d", 0, "No. of days to get forecast (shorthand)")
 	flag.BoolVar(&ignoreAlerts, "ignore-alerts", false, "Ignore alerts in weather output")
 	flag.BoolVar(&hideIcon, "hide-icon", false, "Hide the weather icons from being output")
-	flag.BoolVar(&noForecast, "no-forecast", false, "Hide the forecast for the next 16 hourse")
+	flag.BoolVar(&noForecast, "no-forecast", false, "Hide the forecast for the next 16 hours")
 
 	flag.Usage = func() {
 		flag.PrintDefaults()
