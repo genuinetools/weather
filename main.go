@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	defaultServerURI string = "https://geocode.genuinetools.com"
+	defaultServerURI string = "https://geocode.jessfraz.com"
 )
 
 var (
