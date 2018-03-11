@@ -7,14 +7,14 @@ import (
 	"os"
 	"strings"
 
-	"github.com/jessfraz/weather/forecast"
-	"github.com/jessfraz/weather/geocode"
-	"github.com/jessfraz/weather/version"
+	"github.com/genuinetools/weather/forecast"
+	"github.com/genuinetools/weather/geocode"
+	"github.com/genuinetools/weather/version"
 	"github.com/mitchellh/colorstring"
 )
 
 const (
-	defaultServerURI string = "https://geocode.jessfraz.com"
+	defaultServerURI string = "https://geocode.genuinetools.com"
 )
 
 var (

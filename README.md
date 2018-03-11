@@ -1,6 +1,6 @@
 # weather
 
-[![Travis CI](https://travis-ci.org/jessfraz/weather.svg?branch=master)](https://travis-ci.org/jessfraz/weather)
+[![Travis CI](https://travis-ci.org/genuinetools/weather.svg?branch=master)](https://travis-ci.org/genuinetools/weather)
 
 Weather via the command line. Uses the [darksky.net](https://darksky.net) API so it's super accurate. Also includes any current weather alerts in the output.
 
@@ -10,16 +10,16 @@ Weather via the command line. Uses the [darksky.net](https://darksky.net) API so
 
 #### Binaries
 
-- **darwin** [386](https://github.com/jessfraz/weather/releases/download/v0.13.0/weather-darwin-386) / [amd64](https://github.com/jessfraz/weather/releases/download/v0.13.0/weather-darwin-amd64)
-- **freebsd** [386](https://github.com/jessfraz/weather/releases/download/v0.13.0/weather-freebsd-386) / [amd64](https://github.com/jessfraz/weather/releases/download/v0.13.0/weather-freebsd-amd64)
-- **linux** [386](https://github.com/jessfraz/weather/releases/download/v0.13.0/weather-linux-386) / [amd64](https://github.com/jessfraz/weather/releases/download/v0.13.0/weather-linux-amd64) / [arm](https://github.com/jessfraz/weather/releases/download/v0.13.0/weather-linux-arm) / [arm64](https://github.com/jessfraz/weather/releases/download/v0.13.0/weather-linux-arm64)
-- **solaris** [amd64](https://github.com/jessfraz/weather/releases/download/v0.13.0/weather-solaris-amd64)
-- **windows** [386](https://github.com/jessfraz/weather/releases/download/v0.13.0/weather-windows-386) / [amd64](https://github.com/jessfraz/weather/releases/download/v0.13.0/weather-windows-amd64)
+- **darwin** [386](https://github.com/genuinetools/weather/releases/download/v0.13.0/weather-darwin-386) / [amd64](https://github.com/genuinetools/weather/releases/download/v0.13.0/weather-darwin-amd64)
+- **freebsd** [386](https://github.com/genuinetools/weather/releases/download/v0.13.0/weather-freebsd-386) / [amd64](https://github.com/genuinetools/weather/releases/download/v0.13.0/weather-freebsd-amd64)
+- **linux** [386](https://github.com/genuinetools/weather/releases/download/v0.13.0/weather-linux-386) / [amd64](https://github.com/genuinetools/weather/releases/download/v0.13.0/weather-linux-amd64) / [arm](https://github.com/genuinetools/weather/releases/download/v0.13.0/weather-linux-arm) / [arm64](https://github.com/genuinetools/weather/releases/download/v0.13.0/weather-linux-arm64)
+- **solaris** [amd64](https://github.com/genuinetools/weather/releases/download/v0.13.0/weather-solaris-amd64)
+- **windows** [386](https://github.com/genuinetools/weather/releases/download/v0.13.0/weather-windows-386) / [amd64](https://github.com/genuinetools/weather/releases/download/v0.13.0/weather-windows-amd64)
 
 #### Via Go
 
 ```bash
-$ go get github.com/jessfraz/weather
+$ go get github.com/genuinetools/weather
 ```
 
 #### Via Homebrew
@@ -36,7 +36,7 @@ $ brew install darksky-weather
 - **`--days, -d`:** Days of weather to retrieve. **defaults to the current weather, ie. 0 or 1**
 - **`--ignore-alerts`:** Don't print alerts in weather output. **defaults false**
 - **`--hide-icon`:** Hide the weather icons from being output. **defaults false**
-- **`--server, -s`:** Weather API server uri **defaults to  "https://geocode.jessfraz.com"**
+- **`--server, -s`:** Weather API server uri **defaults to  "https://geocode.genuinetools.com"**
 
 
 ### Examples
@@ -145,4 +145,4 @@ test                           Runs the go tests
 vet                            Verifies `go vet` passes
 ```
 
-[![Analytics](https://ga-beacon.appspot.com/UA-29404280-16/weather/README.md)](https://github.com/jessfraz/weather)
+[![Analytics](https://ga-beacon.appspot.com/UA-29404280-16/weather/README.md)](https://github.com/genuinetools/weather)

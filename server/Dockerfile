@@ -13,8 +13,8 @@ RUN set -x \
 		gcc \
 		libc-dev \
 		libgcc \
-	&& go get -v github.com/jessfraz/weather \
-	&& cd /go/src/github.com/jessfraz/weather \
+	&& go get -v github.com/genuinetools/weather \
+	&& cd /go/src/github.com/genuinetools/weather \
 	&& CGO_ENABLED=0 go build -a -tags netgo -ldflags '-extldflags "-static"' -o /usr/bin/weather-server ./server \
 	&& apk del .build-deps \
 	&& rm -rf /go \
