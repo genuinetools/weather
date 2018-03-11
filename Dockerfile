@@ -7,7 +7,7 @@ ENV GOPATH /go
 RUN	apk add --no-cache \
 	ca-certificates
 
-COPY . /go/src/github.com/jessfraz/weather
+COPY . /go/src/github.com/genuinetools/weather
 
 RUN set -x \
 	&& apk add --no-cache --virtual .build-deps \
@@ -16,7 +16,7 @@ RUN set -x \
 		libc-dev \
 		libgcc \
 		make \
-	&& cd /go/src/github.com/jessfraz/weather \
+	&& cd /go/src/github.com/genuinetools/weather \
 	&& make static \
 	&& mv weather /usr/bin/weather \
 	&& apk del .build-deps \
