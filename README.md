@@ -36,7 +36,7 @@ $ brew install darksky-weather
 - **`--days, -d`:** Days of weather to retrieve. **defaults to the current weather, ie. 0 or 1**
 - **`--ignore-alerts`:** Don't print alerts in weather output. **defaults false**
 - **`--hide-icon`:** Hide the weather icons from being output. **defaults false**
-- **`--server, -s`:** Weather API server uri **defaults to  "https://geocode.genuinetools.com"**
+- **`--server, -s`:** Weather API server uri **defaults to  "https://geocode.jessfraz.com"**
 
 
 ### Examples
