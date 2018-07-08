@@ -30,14 +30,37 @@ $ brew install darksky-weather
 
 ## Usage
 
-- **`--location, -l`:** Your address, can be in the format of just a zipcode or a city, state, or the full address. **defaults to auto locating you based off your ip**
-- **`--units, -u`:** The unit system to use. **defaults to `auto`**, other options are `us`, `si`, `uk`, `uk2`, `ca`
-    for more information on units see [the darksky.net api](https://darksky.net/dev/docs/forecast)
-- **`--days, -d`:** Days of weather to retrieve. **defaults to the current weather, ie. 0 or 1**
-- **`--ignore-alerts`:** Don't print alerts in weather output. **defaults false**
-- **`--hide-icon`:** Hide the weather icons from being output. **defaults false**
-- **`--server, -s`:** Weather API server uri **defaults to  "https://geocode.jessfraz.com"**
-
+```console
+$ weather -h
+  -c    Get location for the ssh client (shorthand)
+  -client
+        Get location for the ssh client
+  -d int
+        No. of days to get forecast (shorthand)
+  -days int
+        No. of days to get forecast
+  -hide-icon
+        Hide the weather icons from being output
+  -ignore-alerts
+        Ignore alerts in weather output
+  -l string
+        Location to get the weather (shorthand)
+  -location string
+        Location to get the weather
+  -no-forecast
+        Hide the forecast for the next 16 hours
+  -s string
+        Weather API server uri (shorthand) (default "https://geocode.jessfraz.com")
+  -server string
+        Weather API server uri (default "https://geocode.jessfraz.com")
+  -u string
+        System of units (shorthand) (e.g. auto, us, si, ca, uk2) (default "auto")
+  -units string
+        System of units (e.g. auto, us, si, ca, uk2) (default "auto")
+  -v    print version and exit (shorthand)
+  -version
+        print version and exit
+```
 
 ### Examples
 
