@@ -10,11 +10,11 @@ Weather via the command line. Uses the [darksky.net](https://darksky.net) API so
 
 #### Binaries
 
-- **darwin** [386](https://github.com/genuinetools/weather/releases/download/v0.15.2/weather-darwin-386) / [amd64](https://github.com/genuinetools/weather/releases/download/v0.15.2/weather-darwin-amd64)
-- **freebsd** [386](https://github.com/genuinetools/weather/releases/download/v0.15.2/weather-freebsd-386) / [amd64](https://github.com/genuinetools/weather/releases/download/v0.15.2/weather-freebsd-amd64)
-- **linux** [386](https://github.com/genuinetools/weather/releases/download/v0.15.2/weather-linux-386) / [amd64](https://github.com/genuinetools/weather/releases/download/v0.15.2/weather-linux-amd64) / [arm](https://github.com/genuinetools/weather/releases/download/v0.15.2/weather-linux-arm) / [arm64](https://github.com/genuinetools/weather/releases/download/v0.15.2/weather-linux-arm64)
-- **solaris** [amd64](https://github.com/genuinetools/weather/releases/download/v0.15.2/weather-solaris-amd64)
-- **windows** [386](https://github.com/genuinetools/weather/releases/download/v0.15.2/weather-windows-386) / [amd64](https://github.com/genuinetools/weather/releases/download/v0.15.2/weather-windows-amd64)
+- **darwin** [386](https://github.com/genuinetools/weather/releases/download/v0.15.3/weather-darwin-386) / [amd64](https://github.com/genuinetools/weather/releases/download/v0.15.3/weather-darwin-amd64)
+- **freebsd** [386](https://github.com/genuinetools/weather/releases/download/v0.15.3/weather-freebsd-386) / [amd64](https://github.com/genuinetools/weather/releases/download/v0.15.3/weather-freebsd-amd64)
+- **linux** [386](https://github.com/genuinetools/weather/releases/download/v0.15.3/weather-linux-386) / [amd64](https://github.com/genuinetools/weather/releases/download/v0.15.3/weather-linux-amd64) / [arm](https://github.com/genuinetools/weather/releases/download/v0.15.3/weather-linux-arm) / [arm64](https://github.com/genuinetools/weather/releases/download/v0.15.3/weather-linux-arm64)
+- **solaris** [amd64](https://github.com/genuinetools/weather/releases/download/v0.15.3/weather-solaris-amd64)
+- **windows** [386](https://github.com/genuinetools/weather/releases/download/v0.15.3/weather-windows-386) / [amd64](https://github.com/genuinetools/weather/releases/download/v0.15.3/weather-windows-amd64)
 
 #### Via Go
 
