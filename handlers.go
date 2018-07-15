@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"flag"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -13,26 +12,10 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-const (
-	darkskyAPIURI = "https://api.darksky.net/forecast"
-	geocodeAPIURI = "https://maps.googleapis.com/maps/api/geocode/json"
-)
-
-var (
-	darkskyAPIKey string
-	geocodeAPIKey string
-
-	port     string
-	certFile string
-	keyFile  string
-)
-
-// JSONResponse is a map[string]string
-// response from the web server
+// JSONResponse is a map[string]string response from the web server.
 type JSONResponse map[string]string
 
-// String returns the string representation of the
-// JSONResponse object
+// String returns the string representation of the JSONResponse object.
 func (j JSONResponse) String() string {
 	str, err := json.MarshalIndent(j, "", "  ")
 	if err != nil {
@@ -44,9 +27,8 @@ func (j JSONResponse) String() string {
 	return string(str)
 }
 
-// forecastHandler takes a forecast.Request object
-// and passes it to the darksky API
-func forecastHandler(w http.ResponseWriter, r *http.Request) {
+// forecastHandler takes a forecast.Request object and passes it to the darksky API.
+func (cmd *serverCommand) forecastHandler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var f forecast.Request
 	if err := decoder.Decode(&f); err != nil {
@@ -63,7 +45,7 @@ func forecastHandler(w http.ResponseWriter, r *http.Request) {
 	data := url.Values{"units": {f.Units}, "exclude": {string(exclude)}}
 
 	// request the darksky.net API
-	url := fmt.Sprintf("%s/%s/%g,%g?%s", darkskyAPIURI, darkskyAPIKey, f.Latitude, f.Longitude, data.Encode())
+	url := fmt.Sprintf("%s/%s/%g,%g?%s", darkskyAPIURI, cmd.darkskyAPIKey, f.Latitude, f.Longitude, data.Encode())
 	resp, err := http.Get(url)
 	if err != nil {
 		writeError(w, fmt.Sprintf("request to %s failed: %v", url, err))
@@ -86,9 +68,8 @@ func forecastHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-// geocodeHandler takes a geocode.Request object
-// and passes it to the Google Geocode API
-func geocodeHandler(w http.ResponseWriter, r *http.Request) {
+// geocodeHandler takes a geocode.Request object and passes it to the Google Geocode API.
+func (cmd *serverCommand) geocodeHandler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var g geocode.Request
 	if err := decoder.Decode(&g); err != nil {
@@ -102,7 +83,7 @@ func geocodeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// data to send to the API
-	data := url.Values{"address": {g.Location}, "key": {geocodeAPIKey}}
+	data := url.Values{"address": {g.Location}, "key": {cmd.geocodeAPIKey}}
 
 	// request the geocode API
 	url := fmt.Sprintf("%s?%s", geocodeAPIURI, data.Encode())
@@ -193,44 +174,4 @@ func writeError(w http.ResponseWriter, msg string) {
 	})
 	logrus.Printf("writing error: %s", msg)
 	return
-}
-
-func init() {
-	flag.StringVar(&darkskyAPIKey, "darksky-apikey", "", "Key for darksky.net API")
-	flag.StringVar(&geocodeAPIKey, "geocode-apikey", "", "Key for Google Maps Geocode API")
-
-	flag.StringVar(&port, "p", "1234", "port for server to run on")
-	flag.StringVar(&certFile, "cert", "", "path to ssl certificate")
-	flag.StringVar(&keyFile, "key", "", "path to ssl key")
-
-	flag.Parse()
-
-	if darkskyAPIKey == "" {
-		logrus.Fatalf("You need to pass a darksky.net API Key")
-	}
-
-	if geocodeAPIKey == "" {
-		logrus.Fatalf("You need to pass a Google Maps Geocode API Key")
-	}
-}
-
-func main() {
-	// create mux server
-	mux := http.NewServeMux()
-
-	mux.HandleFunc("/forecast", forecastHandler) // forecast handler
-	mux.HandleFunc("/geocode", geocodeHandler)   // geocode handler
-	mux.HandleFunc("/", failHandler)             // everything else fail handler
-
-	// set up the server
-	server := &http.Server{
-		Addr:    ":" + port,
-		Handler: mux,
-	}
-	logrus.Infof("Starting server on port %q", port)
-	if certFile != "" && keyFile != "" {
-		logrus.Fatal(server.ListenAndServeTLS(certFile, keyFile))
-	} else {
-		logrus.Fatal(server.ListenAndServe())
-	}
 }

@@ -44,6 +44,11 @@ func main() {
 	p.GitCommit = version.GITCOMMIT
 	p.Version = version.VERSION
 
+	// Build the list of available commands.
+	p.Commands = []cli.Command{
+		&serverCommand{},
+	}
+
 	// Setup the global flags.
 	p.FlagSet = flag.NewFlagSet("global", flag.ExitOnError)
 	p.FlagSet.StringVar(&location, "location", "", "Location to get the weather")
