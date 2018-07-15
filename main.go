@@ -4,6 +4,9 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"io"
+	"log"
+	"net/http"
 	"os"
 	"strings"
 
@@ -27,6 +30,7 @@ var (
 	server       string
 	vrsn         bool
 	client       bool
+	satImage     bool
 	geo          geocode.Geocode
 )
 
@@ -51,7 +55,7 @@ func init() {
 	flag.IntVar(&days, "d", 0, "No. of days to get forecast (shorthand)")
 	flag.BoolVar(&ignoreAlerts, "ignore-alerts", false, "Ignore alerts in weather output")
 	flag.BoolVar(&hideIcon, "hide-icon", false, "Hide the weather icons from being output")
-	flag.BoolVar(&noForecast, "no-forecast", false, "Hide the forecast for the next 16 hours")
+	flag.BoolVar(&satImage, "satImage", false, "Export the satellite image for U.S.A.")
 
 	flag.Usage = func() {
 		flag.PrintDefaults()
@@ -128,6 +132,31 @@ func main() {
 	if days > 0 {
 		forecast.PrintDaily(fc, days)
 	}
+
+	if satImage == true {
+		url := "https://cdn.star.nesdis.noaa.gov/GOES16/ABI/GIFS/GOES16-CONUS-GEOCOLOR-625x375.gif"
+
+		response, err := http.Get(url)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		defer response.Body.Close()
+
+		image, err := os.Create("../latest_satellite.gif")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		_, err = io.Copy(image, response.Body)
+		if err != nil {
+			log.Fatal(err)
+		}
+		image.Close()
+
+		fmt.Println("The latest NOAA satellite image has been saved locally.")
+	}
+
 }
 
 func usageAndExit(message string, exitCode int) {
