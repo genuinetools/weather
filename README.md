@@ -38,34 +38,29 @@ $ brew install darksky-weather
 
 ```console
 $ weather -h
-  -c    Get location for the ssh client (shorthand)
-  -client
-        Get location for the ssh client
-  -d int
-        No. of days to get forecast (shorthand)
-  -days int
-        No. of days to get forecast
-  -hide-icon
-        Hide the weather icons from being output
-  -ignore-alerts
-        Ignore alerts in weather output
-  -l string
-        Location to get the weather (shorthand)
-  -location string
-        Location to get the weather
-  -no-forecast
-        Hide the forecast for the next 16 hours
-  -s string
-        Weather API server uri (shorthand) (default "https://geocode.jessfraz.com")
-  -server string
-        Weather API server uri (default "https://geocode.jessfraz.com")
-  -u string
-        System of units (shorthand) (e.g. auto, us, si, ca, uk2) (default "auto")
-  -units string
-        System of units (e.g. auto, us, si, ca, uk2) (default "auto")
-  -v    print version and exit (shorthand)
-  -version
-        print version and exit
+weather -  Weather forecast via the command line.
+
+Usage: weather <command>
+
+Flags:
+
+  -c              Get location for the ssh client (shorthand) (default: false)
+  -client         Get location for the ssh client (default: false)
+  -d              No. of days to get forecast (shorthand) (default: 0)
+  -days           No. of days to get forecast (default: 0)
+  -hide-icon      Hide the weather icons from being output (default: false)
+  -ignore-alerts  Ignore alerts in weather output (default: false)
+  -l              Location to get the weather (shorthand) (default: <none>)
+  -location       Location to get the weather (default: <none>)
+  -no-forecast    Hide the forecast for the next 16 hours (default: false)
+  -s              Weather API server uri (shorthand) (default: https://geocode.jessfraz.com)
+  -server         Weather API server uri (default: https://geocode.jessfraz.com)
+  -u              System of units (shorthand) (e.g. auto, us, si, ca, uk2) (default: auto)
+  -units          System of units (e.g. auto, us, si, ca, uk2) (default: auto)
+
+Commands:
+
+  version  Show the version information.
 ```
 
 ### Examples

@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"flag"
 	"fmt"
 	"os"
 	"strings"
 
+	"github.com/genuinetools/pkg/cli"
 	"github.com/genuinetools/weather/forecast"
 	"github.com/genuinetools/weather/geocode"
 	"github.com/genuinetools/weather/version"
@@ -25,117 +27,120 @@ var (
 	hideIcon     bool
 	noForecast   bool
 	server       string
-	vrsn         bool
 	client       bool
-	geo          geocode.Geocode
+
+	geo geocode.Geocode
 )
-
-func printError(err error) {
-	fmt.Println(colorstring.Color("[red]" + err.Error()))
-	os.Exit(1)
-}
-
-func init() {
-	// parse flags
-	flag.BoolVar(&vrsn, "version", false, "print version and exit")
-	flag.BoolVar(&vrsn, "v", false, "print version and exit (shorthand)")
-	flag.StringVar(&location, "location", "", "Location to get the weather")
-	flag.StringVar(&location, "l", "", "Location to get the weather (shorthand)")
-	flag.BoolVar(&client, "client", false, "Get location for the ssh client")
-	flag.BoolVar(&client, "c", false, "Get location for the ssh client (shorthand)")
-	flag.StringVar(&units, "units", "auto", "System of units (e.g. auto, us, si, ca, uk2)")
-	flag.StringVar(&units, "u", "auto", "System of units (shorthand) (e.g. auto, us, si, ca, uk2)")
-	flag.StringVar(&server, "server", defaultServerURI, "Weather API server uri")
-	flag.StringVar(&server, "s", defaultServerURI, "Weather API server uri (shorthand)")
-	flag.IntVar(&days, "days", 0, "No. of days to get forecast")
-	flag.IntVar(&days, "d", 0, "No. of days to get forecast (shorthand)")
-	flag.BoolVar(&ignoreAlerts, "ignore-alerts", false, "Ignore alerts in weather output")
-	flag.BoolVar(&hideIcon, "hide-icon", false, "Hide the weather icons from being output")
-	flag.BoolVar(&noForecast, "no-forecast", false, "Hide the forecast for the next 16 hours")
-
-	flag.Usage = func() {
-		flag.PrintDefaults()
-	}
-
-	flag.Parse()
-
-	if server == "" {
-		usageAndExit("Please enter a Weather API server uri or leave blank to use the default.", 0)
-	}
-}
 
 //go:generate go run icons/generate.go
 
 func main() {
-	if vrsn {
-		fmt.Printf("weather version %s, build %s", version.VERSION, version.GITCOMMIT)
-		return
+	// Create a new cli program.
+	p := cli.NewProgram()
+	p.Name = "weather"
+	p.Description = "Weather forecast via the command line"
+
+	// Set the GitCommit and Version.
+	p.GitCommit = version.GITCOMMIT
+	p.Version = version.VERSION
+
+	// Setup the global flags.
+	p.FlagSet = flag.NewFlagSet("global", flag.ExitOnError)
+	p.FlagSet.StringVar(&location, "location", "", "Location to get the weather")
+	p.FlagSet.StringVar(&location, "l", "", "Location to get the weather (shorthand)")
+
+	p.FlagSet.BoolVar(&client, "client", false, "Get location for the ssh client")
+	p.FlagSet.BoolVar(&client, "c", false, "Get location for the ssh client (shorthand)")
+
+	p.FlagSet.StringVar(&units, "units", "auto", "System of units (e.g. auto, us, si, ca, uk2)")
+	p.FlagSet.StringVar(&units, "u", "auto", "System of units (shorthand) (e.g. auto, us, si, ca, uk2)")
+
+	p.FlagSet.StringVar(&server, "server", defaultServerURI, "Weather API server uri")
+	p.FlagSet.StringVar(&server, "s", defaultServerURI, "Weather API server uri (shorthand)")
+
+	p.FlagSet.IntVar(&days, "days", 0, "No. of days to get forecast")
+	p.FlagSet.IntVar(&days, "d", 0, "No. of days to get forecast (shorthand)")
+
+	p.FlagSet.BoolVar(&ignoreAlerts, "ignore-alerts", false, "Ignore alerts in weather output")
+	p.FlagSet.BoolVar(&hideIcon, "hide-icon", false, "Hide the weather icons from being output")
+	p.FlagSet.BoolVar(&noForecast, "no-forecast", false, "Hide the forecast for the next 16 hours")
+
+	// Set the before function.
+	p.Before = func(ctx context.Context) error {
+		if len(server) < 1 {
+			return errors.New("Please enter a Weather API server uri or leave blank to use the default")
+		}
+
+		return nil
 	}
 
-	var err error
-	if location == "" {
-		sshConn := os.Getenv("SSH_CONNECTION")
-		if client && len(sshConn) > 0 {
-			// use their ssh connection to locate them
-			ipports := strings.Split(sshConn, " ")
-			geo, err = geocode.IPLocate(ipports[0])
-			if err != nil {
-				printError(err)
-			}
+	// Set the main program action.
+	p.Action = func(ctx context.Context) error {
+		var err error
+		if location == "" {
+			sshConn := os.Getenv("SSH_CONNECTION")
+			if client && len(sshConn) > 0 {
+				// use their ssh connection to locate them
+				ipports := strings.Split(sshConn, " ")
+				geo, err = geocode.IPLocate(ipports[0])
+				if err != nil {
+					printError(err)
+				}
 
+			} else {
+				// auto locate them
+				geo, err = geocode.Autolocate()
+				if err != nil {
+					printError(err)
+				}
+
+				if geo.Latitude == 0 || geo.Longitude == 0 {
+					printError(errors.New("Latitude and Longitude could not be determined from your IP so the weather will not be accurate\nTry: weather -l <your_zipcode> OR weather -l \"your city, state\""))
+				}
+			}
 		} else {
-			// auto locate them
-			geo, err = geocode.Autolocate()
+			// get geolocation data for the given location
+			geo, err = geocode.Locate(location, server)
 			if err != nil {
 				printError(err)
-			}
-
-			if geo.Latitude == 0 || geo.Longitude == 0 {
-				printError(errors.New("Latitude and Longitude could not be determined from your IP so the weather will not be accurate\nTry: weather -l <your_zipcode> OR weather -l \"your city, state\""))
 			}
 		}
-	} else {
-		// get geolocation data for the given location
-		geo, err = geocode.Locate(location, server)
+
+		if geo.Latitude == 0 || geo.Longitude == 0 {
+			printError(errors.New("Latitude and Longitude could not be determined so the weather will not be accurate"))
+		}
+
+		data := forecast.Request{
+			Latitude:  geo.Latitude,
+			Longitude: geo.Longitude,
+			Units:     units,
+			Exclude:   []string{"minutely"},
+		}
+		if noForecast {
+			data.Exclude = append(data.Exclude, "hourly")
+		}
+
+		fc, err := forecast.Get(fmt.Sprintf("%s/forecast", server), data)
 		if err != nil {
 			printError(err)
 		}
+
+		if err := forecast.PrintCurrent(fc, geo, ignoreAlerts, hideIcon); err != nil {
+			printError(err)
+		}
+
+		if days > 0 {
+			forecast.PrintDaily(fc, days)
+		}
+
+		return nil
 	}
 
-	if geo.Latitude == 0 || geo.Longitude == 0 {
-		printError(errors.New("Latitude and Longitude could not be determined so the weather will not be accurate"))
-	}
-
-	data := forecast.Request{
-		Latitude:  geo.Latitude,
-		Longitude: geo.Longitude,
-		Units:     units,
-		Exclude:   []string{"minutely"},
-	}
-	if noForecast {
-		data.Exclude = append(data.Exclude, "hourly")
-	}
-
-	fc, err := forecast.Get(fmt.Sprintf("%s/forecast", server), data)
-	if err != nil {
-		printError(err)
-	}
-
-	if err := forecast.PrintCurrent(fc, geo, ignoreAlerts, hideIcon); err != nil {
-		printError(err)
-	}
-
-	if days > 0 {
-		forecast.PrintDaily(fc, days)
-	}
+	// Run our program.
+	p.Run()
 }
 
-func usageAndExit(message string, exitCode int) {
-	if message != "" {
-		fmt.Fprintf(os.Stderr, message)
-		fmt.Fprintf(os.Stderr, "\n\n")
-	}
-	flag.Usage()
-	fmt.Fprintf(os.Stderr, "\n")
-	os.Exit(exitCode)
+func printError(err error) {
+	fmt.Println(colorstring.Color("[red]" + err.Error()))
+	os.Exit(1)
 }

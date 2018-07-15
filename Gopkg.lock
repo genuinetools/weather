@@ -3,6 +3,14 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:7565505658b9be30126d15b52e21da5e386baf39c1c6a157c4310c1b55d3981c"
+  name = "github.com/genuinetools/pkg"
+  packages = ["cli"]
+  pruneopts = "NUT"
+  revision = "6b68c161d93e3a4e8b6a16e693fff870ef6d0648"
+
+[[projects]]
+  branch = "master"
   digest = "1:58ed95018a7eb9f94125846e7cf1f12843c0d46308e9a7a6a58e895270da5b99"
   name = "github.com/mitchellh/colorstring"
   packages = ["."]
@@ -40,6 +48,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/genuinetools/pkg/cli",
     "github.com/mitchellh/colorstring",
     "github.com/sirupsen/logrus",
   ]
