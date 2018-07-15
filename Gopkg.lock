@@ -3,38 +3,38 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:da76ad77641fcecb74d2dac56a907befd0a83c8e7fb2013bd49bc69106ac5d60"
+  digest = "1:58ed95018a7eb9f94125846e7cf1f12843c0d46308e9a7a6a58e895270da5b99"
   name = "github.com/mitchellh/colorstring"
   packages = ["."]
-  pruneopts = "NU"
+  pruneopts = "NUT"
   revision = "8631ce90f28644f54aeedcb3e389a85174e067d1"
 
 [[projects]]
-  digest = "1:fb851541f5df335edb55ae691842a09ba4397bbf2deec9f7c5ad4a49de3fa44d"
+  digest = "1:6989062eb7ccf25cf38bf4fe3dba097ee209f896cda42cefdca3927047bef7b6"
   name = "github.com/sirupsen/logrus"
   packages = ["."]
-  pruneopts = "NU"
+  pruneopts = "NUT"
   revision = "c155da19408a8799da419ed3eeb0cb5db0ad5dbc"
   version = "v1.0.5"
 
 [[projects]]
   branch = "master"
-  digest = "1:ed359abd610d03004c519d6269e99c31d33bb218ba4f889985d30a5ada76d4df"
+  digest = "1:3f3a05ae0b95893d90b9b3b5afdb79a9b3d96e4e36e099d841ae602e4aca0da8"
   name = "golang.org/x/crypto"
   packages = ["ssh/terminal"]
-  pruneopts = "NU"
+  pruneopts = "NUT"
   revision = "a49355c7e3f8fe157a85be2f77e6e269a0f89602"
 
 [[projects]]
   branch = "master"
-  digest = "1:f18a84ee7d48acb0a402e5ae19df6c7df4d6d6db09593f60cd29d2b6e8c1cee4"
+  digest = "1:64107e3c8f52f341891a565d117bf263ed396fe0c16bad19634b25be25debfaa"
   name = "golang.org/x/sys"
   packages = [
     "unix",
     "windows",
   ]
-  pruneopts = "NU"
-  revision = "1b2967e3c290b7c545b3db0deeda16e9be4f98a2"
+  pruneopts = "NUT"
+  revision = "ac767d655b305d4e9612f5f6e33120b9176c4ad4"
 
 [solve-meta]
   analyzer-name = "dep"
