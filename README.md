@@ -14,10 +14,11 @@ Weather via the command line. Uses the [darksky.net](https://darksky.net) API so
       * [Via Homebrew](README.md#via-homebrew)
  * [Usage](README.md#usage)
    * [Examples](README.md#examples)
- * [Makefile Usage](README.md#makefile-usage)
  * [Running the Server](README.md#running-the-server)
-   * [Usage](README.md#usage-1)
-   * [Running with Docker](README.md#running-with-docker)
+      * [Usage](README.md#usage-1)
+      * [Running with Docker](README.md#running-with-docker)
+ * [Contributing](README.md#contributing)
+      * [Makefile Usage](README.md#makefile-usage)
 
 ## Installation
 
@@ -155,7 +156,45 @@ $ weather -l "Manhattan Beach, CA"
 # The pressure is 1012.99 mbar
 ```
 
-## Makefile Usage
+## Running the Server
+
+API Server for `weather` command line tool. Connects to the [Google Geocode
+API](https://developers.google.com/maps/documentation/geocoding/intro)
+and [darksky.net API](https://darksky.net/dev/docs).
+
+#### Usage
+
+```bash
+$ weather server -h
+Usage: weather server [OPTIONS]
+
+Run a static UI server for a registry.
+
+Flags:
+
+  -cert            path to ssl cert (default: <none>)
+  -darksky-apikey  Key for darksky.net API (default: <none>)
+  -geocode-apikey  Key for Google Maps Geocode API (default: <none>)
+  -key             path to ssl key (default: <none>)
+  -port            port for server to run on (default: 1234)
+```
+
+#### Running with Docker
+
+```console
+$ docker run --restart always -d \
+    --name weather-server \
+    -p 1234:1234 \
+    r.j3ss.co/weather server \
+    --geocode-apikey "YOUR_GOOGLE_GEOCODING_APIKEY" \
+    --darksky-apikey "YOUR_DARKSKY.NET_APIKEY"
+```
+
+## Contributing
+
+Please do!
+
+#### Makefile Usage
 
 ```console
 $ make help
@@ -174,40 +213,6 @@ staticcheck                    Verifies `staticcheck` passes
 tag                            Create a new git tag to prepare to build a release
 test                           Runs the go tests
 vet                            Verifies `go vet` passes
-```
-
-## Running the Server
-
-API Server for `weather` command line tool. Connects to the [Google Geocode
-API](https://developers.google.com/maps/documentation/geocoding/intro)
-and [darksky.net API](https://darksky.net/dev/docs).
-
-### Usage
-
-```bash
-$ weather server -h
-Usage: weather server [OPTIONS]
-
-Run a static UI server for a registry.
-
-Flags:
-
-  -cert            path to ssl cert (default: <none>)
-  -darksky-apikey  Key for darksky.net API (default: <none>)
-  -geocode-apikey  Key for Google Maps Geocode API (default: <none>)
-  -key             path to ssl key (default: <none>)
-  -port            port for server to run on (default: 1234)
-```
-
-### Running with Docker
-
-```console
-$ docker run --restart always -d \
-    --name weather-server \
-    -p 1234:1234 \
-    r.j3ss.co/weather server \
-    --geocode-apikey "YOUR_GOOGLE_GEOCODING_APIKEY" \
-    --darksky-apikey "YOUR_DARKSKY.NET_APIKEY"
 ```
 
 [![Analytics](https://ga-beacon.appspot.com/UA-29404280-16/weather/README.md)](https://github.com/genuinetools/weather)
