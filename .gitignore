@@ -45,8 +45,6 @@ Icon
 weather
 cross/
 
-server/weather-server
-
 # Go coverage results
 coverage.txt
 profile.out

@@ -1,30 +1,36 @@
 # weather
 
-[![Travis CI](https://travis-ci.org/genuinetools/weather.svg?branch=master)](https://travis-ci.org/genuinetools/weather)
+[![Travis CI](https://img.shields.io/travis/genuinetools/weather.svg?style=for-the-badge)](https://travis-ci.org/genuinetools/weather)
+[![GoDoc](https://img.shields.io/badge/godoc-reference-5272B4.svg?style=for-the-badge)](https://godoc.org/github.com/genuinetools/weather)
+[![Github All Releases](https://img.shields.io/github/downloads/genuinetools/weather/total.svg?style=for-the-badge)](https://github.com/genuinetools/weather/releases)
 
 Weather via the command line. Uses the [darksky.net](https://darksky.net) API so it's super accurate. Also includes any current weather alerts in the output.
 
 ![Screenshot](screenshot.png)
 
+ * [Installation](README.md#installation)
+      * [Binaries](README.md#binaries)
+      * [Via Go](README.md#via-go)
+      * [Via Homebrew](README.md#via-homebrew)
+ * [Usage](README.md#usage)
+   * [Examples](README.md#examples)
+ * [Makefile Usage](README.md#makefile-usage)
+
 ## Installation
 
 #### Binaries
 
-- **darwin** [386](https://github.com/genuinetools/weather/releases/download/v0.15.4/weather-darwin-386) / [amd64](https://github.com/genuinetools/weather/releases/download/v0.15.4/weather-darwin-amd64)
-- **freebsd** [386](https://github.com/genuinetools/weather/releases/download/v0.15.4/weather-freebsd-386) / [amd64](https://github.com/genuinetools/weather/releases/download/v0.15.4/weather-freebsd-amd64)
-- **linux** [386](https://github.com/genuinetools/weather/releases/download/v0.15.4/weather-linux-386) / [amd64](https://github.com/genuinetools/weather/releases/download/v0.15.4/weather-linux-amd64) / [arm](https://github.com/genuinetools/weather/releases/download/v0.15.4/weather-linux-arm) / [arm64](https://github.com/genuinetools/weather/releases/download/v0.15.4/weather-linux-arm64)
-- **solaris** [amd64](https://github.com/genuinetools/weather/releases/download/v0.15.4/weather-solaris-amd64)
-- **windows** [386](https://github.com/genuinetools/weather/releases/download/v0.15.4/weather-windows-386) / [amd64](https://github.com/genuinetools/weather/releases/download/v0.15.4/weather-windows-amd64)
+For installation instructions from binaries please visit the [Releases Page](https://github.com/genuinetools/weather/releases).
 
 #### Via Go
 
-```bash
+```console
 $ go get github.com/genuinetools/weather
 ```
 
 #### Via Homebrew
 
-```bash
+```console
 $ brew install darksky-weather
 ```
 
@@ -155,14 +161,18 @@ $ weather -l "Manhattan Beach, CA"
 
 ```console
 $ make help
-all                            Runs a clean, build, fmt, lint, test, vet and install
+all                            Runs a clean, build, fmt, lint, test, staticcheck, vet and install
 build                          Builds a dynamic executable or package
+bump-version                   Bump the version in the version file. Set BUMP to [ patch | major | minor ]
 clean                          Cleanup any build binaries or packages
-cross                          Builds the cross compiled binaries, creating a clean directory structure (eg. GOOS/GOARCH/binary)
-fmt                            Verifies all files have men `gofmt`ed
+cover                          Runs go test with coverage
+cross                          Builds the cross-compiled binaries, creating a clean directory structure (eg. GOOS/GOARCH/binary)
+fmt                            Verifies all files have been `gofmt`ed
 install                        Installs the executable or package
 lint                           Verifies `golint` passes
-release                        Builds the cross compiled binaries, naming them in such a way for release (eg. binary-GOOS-GOARCH)
+release                        Builds the cross-compiled binaries, naming them in such a way for release (eg. binary-GOOS-GOARCH)
+static                         Builds a static executable
+staticcheck                    Verifies `staticcheck` passes
 tag                            Create a new git tag to prepare to build a release
 test                           Runs the go tests
 vet                            Verifies `go vet` passes

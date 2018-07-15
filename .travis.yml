@@ -18,39 +18,39 @@ jobs:
       deploy:
         provider: releases
         file:
-          - cross/weather-linux-amd64.md5
-          - cross/weather-windows-386.sha256
-          - cross/weather-linux-arm
-          - cross/weather-darwin-amd64.md5
           - cross/weather-darwin-amd64
-          - cross/weather-solaris-amd64.md5
-          - cross/weather-linux-arm64.sha256
-          - cross/weather-linux-arm.sha256
-          - cross/weather-linux-386.sha256
+          - cross/weather-darwin-amd64.md5
+          - cross/weather-darwin-amd64.sha256
+          - cross/weather-darwin-386
           - cross/weather-darwin-386.md5
-          - cross/weather-windows-386.md5
+          - cross/weather-darwin-386.sha256
+          - cross/weather-freebsd-amd64
           - cross/weather-freebsd-amd64.md5
-          - cross/weather-linux-arm64.md5
-          - cross/weather-linux-arm64
           - cross/weather-freebsd-amd64.sha256
-          - cross/weather-freebsd-386.md5
-          - cross/weather-linux-amd64.sha256
-          - cross/weather-linux-386.md5
           - cross/weather-freebsd-386
+          - cross/weather-freebsd-386.md5
+          - cross/weather-freebsd-386.sha256
+          - cross/weather-linux-arm
+          - cross/weather-linux-arm.md5
+          - cross/weather-linux-arm.sha256
+          - cross/weather-linux-arm64
+          - cross/weather-linux-arm64.md5
+          - cross/weather-linux-arm64.sha256
+          - cross/weather-linux-amd64
+          - cross/weather-linux-amd64.md5
+          - cross/weather-linux-amd64.sha256
+          - cross/weather-linux-386
+          - cross/weather-linux-386.md5
+          - cross/weather-linux-386.sha256
+          - cross/weather-solaris-amd64
+          - cross/weather-solaris-amd64.md5
           - cross/weather-solaris-amd64.sha256
           - cross/weather-windows-amd64
           - cross/weather-windows-amd64.md5
           - cross/weather-windows-amd64.sha256
-          - cross/weather-linux-arm.md5
-          - cross/weather-darwin-386.sha256
-          - cross/weather-darwin-amd64.sha256
           - cross/weather-windows-386
-          - cross/weather-solaris-amd64
-          - cross/weather-darwin-386
-          - cross/weather-linux-386
-          - cross/weather-freebsd-amd64
-          - cross/weather-freebsd-386.sha256
-          - cross/weather-linux-amd64
+          - cross/weather-windows-386.md5
+          - cross/weather-windows-386.sha256
         skip_cleanup: true
         on:
           tags: true
