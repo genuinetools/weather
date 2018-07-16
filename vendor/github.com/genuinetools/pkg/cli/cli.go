@@ -99,9 +99,10 @@ func (p *Program) Run() {
 		p.Action = p.usage
 	}
 
-	// If we are not running commands then automatically run the main action of
-	// the program instead.
-	if len(p.Commands) <= 1 {
+	// If we are not running a commands we know, then automatically
+	// run the main action of the program instead.
+	// Also enter this loop if we weren't passed any arguments.
+	if len(os.Args) < 2 || !in(os.Args[1], p.Commands) {
 		// Set the default flagset if our flagset is undefined.
 		if p.FlagSet == nil {
 			p.FlagSet = defaultFlagSet(p.Name)
@@ -120,33 +121,25 @@ func (p *Program) Run() {
 
 		// Run the main action _if_ we are not in the loop for the version command
 		// that is added by default.
-		if p.FlagSet.NArg() < 1 || p.FlagSet.Arg(0) != "version" {
-			if p.Before != nil {
-				if err := p.Before(ctx); err != nil {
-					fmt.Fprintf(os.Stderr, "%v\n", err)
-					os.Exit(1)
-				}
-			}
-
-			if err := p.Action(ctx); err != nil {
+		if p.Before != nil {
+			if err := p.Before(ctx); err != nil {
 				fmt.Fprintf(os.Stderr, "%v\n", err)
 				os.Exit(1)
 			}
-
-			// Done.
-			return
 		}
-	}
 
-	// If we have commands but the user did not specify one, return the usage.
-	if len(p.Commands) > 1 && len(os.Args) < 2 {
-		p.usage(ctx)
-		os.Exit(1)
+		if err := p.Action(ctx); err != nil {
+			fmt.Fprintf(os.Stderr, "%v\n", err)
+			os.Exit(1)
+		}
+
+		// Done.
+		return
 	}
 
 	// Iterate over the commands in the program.
 	for _, command := range p.Commands {
-		if name := command.Name(); os.Args[1] == name {
+		if os.Args[1] == command.Name() {
 			// Set the default flagset if our flagset is undefined.
 			if p.FlagSet == nil {
 				p.FlagSet = defaultFlagSet(p.Name)
@@ -272,4 +265,13 @@ func resetFlagUsage(fs *flag.FlagSet) {
 func defaultFlagSet(n string) *flag.FlagSet {
 	// Create the default flagset with a debug flag.
 	return flag.NewFlagSet(n, flag.ExitOnError)
+}
+
+func in(a string, c []Command) bool {
+	for _, b := range c {
+		if b.Name() == a {
+			return true
+		}
+	}
+	return false
 }

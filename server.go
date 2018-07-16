@@ -49,7 +49,7 @@ func (cmd *serverCommand) Run(ctx context.Context, args []string) error {
 	signal.Notify(signals, os.Interrupt)
 	signal.Notify(signals, syscall.SIGTERM)
 	var cancel context.CancelFunc
-	ctx, cancel = context.WithCancel(ctx)
+	_, cancel = context.WithCancel(ctx)
 	go func() {
 		for sig := range signals {
 			cancel()
