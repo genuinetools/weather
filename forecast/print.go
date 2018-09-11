@@ -185,7 +185,7 @@ func printCommon(weather Weather, unitsFormat UnitMeasures) error {
 		fmt.Printf("  The cloud coverage is %s\n", cloudCover)
 	}
 
-	if weather.Visibility < 10 {
+	if (unitsFormat.Length == "kilometers" && kmToMile(weather.Visibility) < 10) || weather.Visibility < 10 {
 		visibility := colorstring.Color(fmt.Sprintf("[bold]%.1f %s", weather.Visibility, unitsFormat.Length))
 		fmt.Printf("  The visibility is %s\n", visibility)
 	}
@@ -196,6 +196,10 @@ func printCommon(weather Weather, unitsFormat UnitMeasures) error {
 	}
 
 	return nil
+}
+
+func kmToMile(km float64) float64 {
+	return km * 0.621371
 }
 
 // PrintCurrent pretty prints the current forecast data.
