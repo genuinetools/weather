@@ -80,7 +80,7 @@ func main() {
 	}
 
 	// Set the main program action.
-	p.Action = func(ctx context.Context) error {
+	p.Action = func(ctx context.Context, args []string) error {
 		var err error
 		if location == "" {
 			sshConn := os.Getenv("SSH_CONNECTION")
