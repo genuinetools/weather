@@ -223,6 +223,10 @@ func Get(uri string, data Request) (forecast Forecast, err error) {
 	if err != nil {
 		return forecast, fmt.Errorf("Http request to %s failed: %s", req.URL, err.Error())
 	}
+
+	if resp.StatusCode != http.StatusOK {
+		return forecast, fmt.Errorf("Http request to %s failed with status code: %v", req.URL, resp.StatusCode)
+	}
 	defer resp.Body.Close()
 
 	// decode the body
