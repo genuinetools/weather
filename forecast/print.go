@@ -147,8 +147,17 @@ func getBearingDetails(degrees float64) string {
 }
 
 func printCommon(weather Weather, unitsFormat UnitMeasures) error {
-	if weather.Humidity > 0 {
+	if weather.DewPoint > 0 {
+		dewPoint := colorstring.Color(fmt.Sprintf("[bold]%.2f%s", weather.DewPoint, unitsFormat.Degrees))
 
+		if weather.DewPoint > 60 {
+			fmt.Printf("  Ugh! The dew point is %s\n", dewPoint)
+		} else {
+			fmt.Printf("  The dew point is %s\n", dewPoint)
+		}
+	}
+
+	if weather.Humidity > 0 {
 		humidity := colorstring.Color(fmt.Sprintf("[bold]%.2f%s", weather.Humidity*100, "%"))
 
 		if weather.Humidity > 0.20 {
