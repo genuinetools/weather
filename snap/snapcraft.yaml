@@ -1,0 +1,23 @@
+name: genuinetools-weather
+version: "0.15.6snap1"
+summary: Weather via the command line
+description: |
+  Uses the darksky.net API so it's super accurate. Also includes any current
+  weather alerts in the output.
+grade: stable
+confinement: strict
+
+apps:
+    genuinetools-weather:
+        command: bin/weather
+        plugs: [ network ]
+parts:
+    weather:
+        source: https://github.com/genuinetools/weather.git
+        source-tag: v0.15.6
+        source-type: git
+        plugin: go
+        go-importpath: github.com/genuinetools/weather
+        after: [go]
+    go:
+        source-tag: go1.7.5
