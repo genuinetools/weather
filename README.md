@@ -12,6 +12,18 @@ Weather via the command line. Uses the [darksky.net](https://darksky.net) API so
 
 <!-- toc -->
 
+- [Installation](#installation)
+    + [Binaries](#binaries)
+    + [Via Go](#via-go)
+    + [Via Homebrew](#via-homebrew)
+- [Usage](#usage)
+  * [Examples](#examples)
+- [Running the Server](#running-the-server)
+    + [Usage](#usage-1)
+    + [Running with Docker](#running-with-docker)
+- [Contributing](#contributing)
+    + [Makefile Usage](#makefile-usage)
+
 <!-- tocstop -->
 
 ## Installation
