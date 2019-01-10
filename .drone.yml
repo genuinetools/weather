@@ -12,5 +12,9 @@ steps:
   - go get golang.org/x/lint/golint
   - go get honnef.co/go/tools/cmd/staticcheck
   - go get github.com/vielmetti/weather
+  - echo $GOPATH
+  - echo $GOROOT
+  - ls -ltr $GOPATH
+  - ls -ltr $GOROOT
   - make all
   - make cover  
