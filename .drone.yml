@@ -1,21 +1,26 @@
 kind: pipeline
 name: drone-weather
 
-clone:
-  depth: 50
+workspace:
+  base: /go
+  path: src/github.com/vielmetti/weather
 
 steps:
-- name: make-cover
-  image: golang:1.10
-  pull: true
-  commands:
-  - go get golang.org/x/lint/golint
-  - go get honnef.co/go/tools/cmd/staticcheck
-  - go get github.com/vielmetti/weather
-  - echo $GOPATH
-  - echo $GOROOT
-  - ls -ltr $HOME
-  - ls -ltr $GOPATH
-  - ls -ltr $GOROOT
-  - make all
-  - make cover  
+  - name: test
+    image: golang
+    commands:
+      - go get
+      - go test
+  - name: build
+    image: golang
+    commands:
+      - go get
+      - go build -o output
+      - chmod +x output
+  - name: run
+    image: golang
+    commands:
+      - go get
+      - go build -o weather
+      - chmod +x weather
+      - ./weather
