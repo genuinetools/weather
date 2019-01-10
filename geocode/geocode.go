@@ -165,7 +165,7 @@ func Autolocate() (geocode Geocode, err error) {
 	// decode the body
 	dec := json.NewDecoder(resp.Body)
 	if err := dec.Decode(&geocode); err != nil {
-		return geocode, fmt.Errorf("Decoding autolocate response failed: %v", err)
+		return geocode, fmt.Errorf("decoding autolocate response failed: %v", err)
 	}
 
 	return geocode, nil
@@ -183,7 +183,7 @@ func IPLocate(ip string) (geocode Geocode, err error) {
 	// decode the body
 	dec := json.NewDecoder(resp.Body)
 	if err := dec.Decode(&geocode); err != nil {
-		return geocode, fmt.Errorf("Decoding autolocate response failed: %v", err)
+		return geocode, fmt.Errorf("decoding autolocate response failed: %v", err)
 	}
 
 	return geocode, nil
@@ -194,7 +194,7 @@ func Locate(location, server string) (geocode Geocode, err error) {
 	// create json data
 	jsonByte, err := json.Marshal(Request{Location: location})
 	if err != nil {
-		return geocode, fmt.Errorf("Marshaling location json failed: %v", err)
+		return geocode, fmt.Errorf("marshaling location json failed: %v", err)
 	}
 
 	// send the request
@@ -214,12 +214,12 @@ func Locate(location, server string) (geocode Geocode, err error) {
 	// decode the body
 	dec := json.NewDecoder(resp.Body)
 	if err := dec.Decode(&geocode); err != nil {
-		return geocode, fmt.Errorf("Decoding geocode response failed: %v", err)
+		return geocode, fmt.Errorf("decoding geocode response failed: %v", err)
 	}
 
 	// These messages come from our API server
 	if geocode.Error != "" {
-		return geocode, fmt.Errorf("Geocode API response error: %s", geocode.Error)
+		return geocode, fmt.Errorf("geocode API response error: %s", geocode.Error)
 	}
 
 	return geocode, nil
