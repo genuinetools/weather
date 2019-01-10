@@ -23,4 +23,4 @@ steps:
       - go get
       - go build -o weather
       - chmod +x weather
-      - ./weather -l "Ann Arbor, Michigan"
+      - ./weather --latitude 42.27756 --longitude -83.74088

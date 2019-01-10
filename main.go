@@ -22,6 +22,8 @@ const (
 
 var (
 	location     string
+	lat          float64
+	lon          float64
 	units        string
 	days         int
 	ignoreAlerts bool
@@ -55,6 +57,9 @@ func main() {
 	p.FlagSet = flag.NewFlagSet("global", flag.ExitOnError)
 	p.FlagSet.StringVar(&location, "location", "", "Location to get the weather")
 	p.FlagSet.StringVar(&location, "l", "", "Location to get the weather (shorthand)")
+	
+	p.FlagSet.Float64Var(&lat, "latitude", 0.0, "Latitude for the weather")
+	p.FlagSet.Float64Var(&lon, "longitude", 0.0, "Longitude for the weather")
 
 	p.FlagSet.BoolVar(&client, "client", false, "Get location for the ssh client")
 	p.FlagSet.BoolVar(&client, "c", false, "Get location for the ssh client (shorthand)")
@@ -86,7 +91,10 @@ func main() {
 	// Set the main program action.
 	p.Action = func(ctx context.Context, args []string) error {
 		var err error
-		if location == "" {
+		if lat != 0.0 && lon != 0.0 {
+			geo.Latitude = lat
+			geo.Longitude = lon
+		} else if location == "" {
 			sshConn := os.Getenv("SSH_CONNECTION")
 			if client && len(sshConn) > 0 {
 				// use their ssh connection to locate them
