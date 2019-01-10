@@ -1,0 +1,10 @@
+kind: pipeline
+name: drone-weather
+
+steps:
+- name: make-cover
+  image: golang:1.10
+  commands:
+  - go get golang.org/x/lint/golint
+  - go get honnef.co/go/tools/cmd/staticcheck
+  - make cover  
