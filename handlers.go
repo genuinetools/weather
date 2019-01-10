@@ -65,7 +65,6 @@ func (cmd *serverCommand) forecastHandler(w http.ResponseWriter, r *http.Request
 		writeError(w, fmt.Sprintf("writing response from %s failed: %v", url, err))
 		return
 	}
-	return
 }
 
 // geocodeHandler takes a geocode.Request object and passes it to the Google Geocode API.
@@ -152,7 +151,6 @@ func (cmd *serverCommand) geocodeHandler(w http.ResponseWriter, r *http.Request)
 		writeError(w, fmt.Sprintf("writing response from %s failed: %v", url, err))
 		return
 	}
-	return
 }
 
 // failHandler returns not a valid endpoint
@@ -162,7 +160,6 @@ func failHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, JSONResponse{
 		"error": fmt.Sprintf("Not a valid endpoint: %s", r.URL.Path),
 	})
-	return
 }
 
 // writeError sends an error back to the requester
@@ -173,5 +170,4 @@ func writeError(w http.ResponseWriter, msg string) {
 		"error": msg,
 	})
 	logrus.Printf("writing error: %s", msg)
-	return
 }
