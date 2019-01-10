@@ -22,6 +22,8 @@ const (
 
 var (
 	location     string
+	lat .        float64
+	lon          float64
 	units        string
 	days         int
 	ignoreAlerts bool
