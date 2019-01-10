@@ -24,9 +24,9 @@ steps:
       - go build -o weather
       - chmod +x weather
       - ./weather --latitude 42.27756 --longitude -83.74088
-   - name: staticcheck
-     image: golang:1.11
-     commands:
-       - go get honnef.co/go/tools/cmd/staticcheck
-       - go get
-       - staticcheck .
+  - name: staticcheck
+    image: golang:1.11
+    commands:
+      - go get honnef.co/go/tools/cmd/staticcheck
+      - go get
+      - staticcheck .
