@@ -1,6 +1,9 @@
 kind: pipeline
 name: drone-weather
 
+clone:
+  depth: 50
+
 steps:
 - name: make-cover
   image: golang:1.10
