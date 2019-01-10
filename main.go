@@ -58,8 +58,8 @@ func main() {
 	p.FlagSet.StringVar(&location, "location", "", "Location to get the weather")
 	p.FlagSet.StringVar(&location, "l", "", "Location to get the weather (shorthand)")
 	
-	p.FlagSet.Float64Var(&lat, "latitude", 0, "Latitude for the weather")
-	p.FlagSet.Float64Var(&lon, "longitude", 0, "Longitude for the weather")
+	p.FlagSet.Float64Var(&lat, "latitude", 0.0, "Latitude for the weather")
+	p.FlagSet.Float64Var(&lon, "longitude", 0.0, "Longitude for the weather")
 
 	p.FlagSet.BoolVar(&client, "client", false, "Get location for the ssh client")
 	p.FlagSet.BoolVar(&client, "c", false, "Get location for the ssh client (shorthand)")
