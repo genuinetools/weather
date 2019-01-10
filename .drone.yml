@@ -29,4 +29,4 @@ steps:
     commands:
       - go get honnef.co/go/tools/cmd/staticcheck
       - go get
-      - staticcheck .
+      - staticcheck
