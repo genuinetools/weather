@@ -45,7 +45,7 @@ type serverCommand struct {
 
 func (cmd *serverCommand) Run(ctx context.Context, args []string) error {
 	// On ^C, or SIGTERM handle exit.
-	signals := make(chan os.Signal, 0)
+	signals := make(chan os.Signal)
 	signal.Notify(signals, os.Interrupt)
 	signal.Notify(signals, syscall.SIGTERM)
 	var cancel context.CancelFunc
@@ -59,7 +59,7 @@ func (cmd *serverCommand) Run(ctx context.Context, args []string) error {
 	}()
 
 	if len(cmd.darkskyAPIKey) < 1 {
-		return errors.New("Please pass a darksky.net API Key")
+		return errors.New("please pass a darksky.net API Key")
 	}
 
 	if len(cmd.geocodeAPIKey) < 1 {
