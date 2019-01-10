@@ -59,7 +59,7 @@ func (cmd *serverCommand) Run(ctx context.Context, args []string) error {
 	}()
 
 	if len(cmd.darkskyAPIKey) < 1 {
-		return errors.New("Please pass a darksky.net API Key")
+		return errors.New("please pass a darksky.net API Key")
 	}
 
 	if len(cmd.geocodeAPIKey) < 1 {
