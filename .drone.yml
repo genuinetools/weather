@@ -7,4 +7,5 @@ steps:
   commands:
   - go get golang.org/x/lint/golint
   - go get honnef.co/go/tools/cmd/staticcheck
+  - make all
   - make cover  
