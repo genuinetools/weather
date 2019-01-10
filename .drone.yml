@@ -14,6 +14,7 @@ steps:
   - go get github.com/vielmetti/weather
   - echo $GOPATH
   - echo $GOROOT
+  - ls -ltr $HOME
   - ls -ltr $GOPATH
   - ls -ltr $GOROOT
   - make all
