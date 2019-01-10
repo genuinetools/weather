@@ -91,7 +91,10 @@ func main() {
 	// Set the main program action.
 	p.Action = func(ctx context.Context, args []string) error {
 		var err error
-		if location == "" {
+		if lat != 0.0 && lon != 0.0 {
+			geo.Latitude = lat
+			geo.Longitude = lon
+		} else if location == "" {
 			sshConn := os.Getenv("SSH_CONNECTION")
 			if client && len(sshConn) > 0 {
 				// use their ssh connection to locate them
