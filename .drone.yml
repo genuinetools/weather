@@ -7,18 +7,18 @@ workspace:
 
 steps:
   - name: test
-    image: golang
+    image: golang:1.11
     commands:
       - go get
       - go test
   - name: build
-    image: golang
+    image: golang:1.11
     commands:
       - go get
-      - go build -o output
-      - chmod +x output
+      - go build -o weather
+      - chmod +x weather
   - name: run
-    image: golang
+    image: golang:1.11
     commands:
       - go get
       - go build -o weather
