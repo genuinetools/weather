@@ -257,7 +257,7 @@ func kmToMile(km float64) float64 {
 }
 
 // PrintCurrent pretty prints the current forecast data.
-func PrintCurrent(forecast Forecast, geolocation geocode.Geocode, ignoreAlerts bool, hideIcon bool, emojiIcons bool) error {
+func PrintCurrent(forecast Forecast, geolocation geocode.Geocode, ignoreAlerts, hideIcon, emojiIcons bool) error {
 	unitsFormat := UnitFormats[forecast.Flags.Units]
 
 	if !hideIcon {
