@@ -141,6 +141,51 @@ func getIcon(iconStr string) (icon string, err error) {
 	return colorstring.Color("[" + color + "]" + icon), nil
 }
 
+func getEmojiIcon(iconStr string) (icon string, err error) {
+	color := "white"
+	// steralize the icon string name
+	iconStr = strings.Replace(strings.Replace(iconStr, "-", "", -1), "_", "", -1)
+
+	switch iconStr {
+	case "clear":
+		icon = "🔆"
+	case "clearday":
+		icon = "🔆"
+	case "clearnight":
+		icon = "🌙"
+	case "clouds":
+		icon = "☁️"
+	case "cloudy":
+		icon = "☁️"
+	case "cloudsnight":
+		icon = "☁️"
+	case "fog":
+		icon = "🌫️"
+	case "haze":
+		icon = "🌫️"
+	case "hazenight":
+		icon = "🌫️"
+	case "partlycloudyday":
+		icon = "⛅️"
+	case "partlycloudynight":
+		icon = "⛅️"
+	case "rain":
+		icon = "🌧"
+	case "sleet":
+		icon = "🌨"
+	case "snow":
+		icon = "🌨"
+	case "thunderstorm":
+		icon = "⛈"
+	case "tornado":
+		icon = "🌪"
+	case "wind":
+		icon = "💨"
+	}
+
+	return colorstring.Color("[" + color + "]" + "\n" + icon), nil
+}
+
 func getBearingDetails(degrees float64) string {
 	index := int(math.Mod((degrees+11.25)/22.5, 16))
 	return Directions[index]
@@ -212,11 +257,18 @@ func kmToMile(km float64) float64 {
 }
 
 // PrintCurrent pretty prints the current forecast data.
-func PrintCurrent(forecast Forecast, geolocation geocode.Geocode, ignoreAlerts bool, hideIcon bool) error {
+func PrintCurrent(forecast Forecast, geolocation geocode.Geocode, ignoreAlerts bool, hideIcon bool, emojiIcons bool) error {
 	unitsFormat := UnitFormats[forecast.Flags.Units]
 
 	if !hideIcon {
-		icon, err := getIcon(forecast.Currently.Icon)
+		var err error
+		var icon string
+
+		if emojiIcons {
+			icon, err = getEmojiIcon(forecast.Currently.Icon)
+		} else {
+			icon, err = getIcon(forecast.Currently.Icon)
+		}
 		if err != nil {
 			return err
 		}

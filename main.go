@@ -26,6 +26,7 @@ var (
 	days         int
 	ignoreAlerts bool
 	hideIcon     bool
+	emojiIcons   bool
 	noForecast   bool
 	jsonOut      bool
 	server       string
@@ -70,6 +71,7 @@ func main() {
 
 	p.FlagSet.BoolVar(&ignoreAlerts, "ignore-alerts", false, "Ignore alerts in weather output")
 	p.FlagSet.BoolVar(&hideIcon, "hide-icon", false, "Hide the weather icons from being output")
+	p.FlagSet.BoolVar(&emojiIcons, "use-emoji-icon", false, "Use emojis for weather icons")
 	p.FlagSet.BoolVar(&noForecast, "no-forecast", false, "Hide the forecast for the next 16 hours")
 
 	p.FlagSet.BoolVar(&jsonOut, "json", false, "Prints the raw JSON API response")
@@ -144,7 +146,7 @@ func main() {
 			return nil
 		}
 
-		if err := forecast.PrintCurrent(fc, geo, ignoreAlerts, hideIcon); err != nil {
+		if err := forecast.PrintCurrent(fc, geo, ignoreAlerts, hideIcon, emojiIcons); err != nil {
 			printError(err)
 		}
 
