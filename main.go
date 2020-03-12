@@ -77,7 +77,7 @@ func main() {
 	// Set the before function.
 	p.Before = func(ctx context.Context) error {
 		if len(server) < 1 {
-			return errors.New("Please enter a Weather API server uri or leave blank to use the default")
+			return errors.New("please enter a weather API server uri or leave blank to use the default")
 		}
 
 		return nil
@@ -104,7 +104,7 @@ func main() {
 				}
 
 				if geo.Latitude == 0 || geo.Longitude == 0 {
-					printError(errors.New("Latitude and Longitude could not be determined from your IP so the weather will not be accurate\nTry: weather -l <your_zipcode> OR weather -l \"your city, state\""))
+					printError(errors.New("latitude and longitude could not be determined from your IP so the weather will not be accurate\nTry: weather -l <your_zipcode> OR weather -l \"your city, state\""))
 				}
 			}
 		} else {
@@ -116,7 +116,7 @@ func main() {
 		}
 
 		if geo.Latitude == 0 || geo.Longitude == 0 {
-			printError(errors.New("Latitude and Longitude could not be determined so the weather will not be accurate"))
+			printError(errors.New("latitude and longitude could not be determined so the weather will not be accurate"))
 		}
 
 		data := forecast.Request{

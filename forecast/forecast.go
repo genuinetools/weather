@@ -209,7 +209,7 @@ func Get(uri string, data Request) (forecast Forecast, err error) {
 	// create json data
 	jsonByte, err := json.Marshal(data)
 	if err != nil {
-		return forecast, fmt.Errorf("Marshaling forecast json failed: %v", err)
+		return forecast, fmt.Errorf("marshaling forecast json failed: %v", err)
 	}
 
 	// send the request
@@ -222,7 +222,7 @@ func Get(uri string, data Request) (forecast Forecast, err error) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return forecast, fmt.Errorf("Http request to %s failed: %s", req.URL, err.Error())
+		return forecast, fmt.Errorf("http request to %s failed: %s", req.URL, err.Error())
 	}
 
 	defer resp.Body.Close()
@@ -232,13 +232,13 @@ func Get(uri string, data Request) (forecast Forecast, err error) {
 			return forecast, fmt.Errorf("Reading error response failed: %v", err)
 		}
 		body = bytes.TrimRight(body, "\n")
-		return forecast, fmt.Errorf("Http request to %s failed with status code %v: %s", req.URL, resp.StatusCode, body)
+		return forecast, fmt.Errorf("http request to %s failed with status code %v: %s", req.URL, resp.StatusCode, body)
 	}
 
 	// decode the body
 	dec := json.NewDecoder(resp.Body)
 	if err = dec.Decode(&forecast); err != nil {
-		return forecast, fmt.Errorf("Decoding forecast response failed: %v", err)
+		return forecast, fmt.Errorf("decoding forecast response failed: %v", err)
 	}
 
 	if forecast.Error != "" {

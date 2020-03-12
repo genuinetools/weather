@@ -1,6 +1,7 @@
 # weather
 
-[![Travis CI](https://img.shields.io/travis/genuinetools/weather.svg?style=for-the-badge)](https://travis-ci.org/genuinetools/weather)
+![make-all](https://github.com/genuinetools/weather/workflows/make%20all/badge.svg)
+![make-image](https://github.com/genuinetools/weather/workflows/make%20image/badge.svg)
 [![GoDoc](https://img.shields.io/badge/godoc-reference-5272B4.svg?style=for-the-badge)](https://godoc.org/github.com/genuinetools/weather)
 [![Github All Releases](https://img.shields.io/github/downloads/genuinetools/weather/total.svg?style=for-the-badge)](https://github.com/genuinetools/weather/releases)
 
@@ -8,23 +9,23 @@ Weather via the command line. Uses the [darksky.net](https://darksky.net) API so
 
 ![Screenshot](screenshot.png)
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
-<!-- toc -->
-
 - [Installation](#installation)
-    + [Binaries](#binaries)
-    + [Via Go](#via-go)
-    + [Via Homebrew](#via-homebrew)
+    - [Binaries](#binaries)
+    - [Via Go](#via-go)
+    - [Via Homebrew](#via-homebrew)
 - [Usage](#usage)
-  * [Examples](#examples)
+  - [Examples](#examples)
 - [Running the Server](#running-the-server)
-    + [Usage](#usage-1)
-    + [Running with Docker](#running-with-docker)
+    - [Usage](#usage-1)
+    - [Running with Docker](#running-with-docker)
 - [Contributing](#contributing)
-    + [Makefile Usage](#makefile-usage)
+    - [Makefile Usage](#makefile-usage)
 
-<!-- tocstop -->
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Installation
 
