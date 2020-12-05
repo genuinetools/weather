@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 )
 
@@ -224,10 +225,15 @@ func Get(uri string, data Request) (forecast Forecast, err error) {
 		return forecast, fmt.Errorf("http request to %s failed: %s", req.URL, err.Error())
 	}
 
-	if resp.StatusCode != http.StatusOK {
-		return forecast, fmt.Errorf("http request to %s failed with status code: %v", req.URL, resp.StatusCode)
-	}
 	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return forecast, fmt.Errorf("Reading error response failed: %v", err)
+		}
+		body = bytes.TrimRight(body, "\n")
+		return forecast, fmt.Errorf("http request to %s failed with status code %v: %s", req.URL, resp.StatusCode, body)
+	}
 
 	// decode the body
 	dec := json.NewDecoder(resp.Body)
